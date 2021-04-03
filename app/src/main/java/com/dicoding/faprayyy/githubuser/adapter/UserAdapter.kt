@@ -19,7 +19,6 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.UserHolder>() {
     fun setData(items: ArrayList<UserModel>) {
         mData.clear()
         mData.addAll(items)
-        Log.d("CEK_DATASET", "$items")
         notifyDataSetChanged()
     }
 
@@ -43,7 +42,7 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.UserHolder>() {
     inner class UserHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemUserBinding.bind(itemView)
         fun bind(user: UserModel) {
-            binding.tvName.text = user.name
+            binding.tvName.text = user.name?.let { checkNull(it) }
             binding.tvUsername.text = user.username
             Glide.with(itemView.context)
                 .load(user.avatar)
@@ -59,6 +58,13 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.UserHolder>() {
 
     interface OnItemClickCallback {
         fun onItemClicked(data: UserModel)
+    }
+
+    private fun checkNull(string: String): String{
+        if (string == "null"){
+            return "-"
+        }
+        return string
     }
 
 }

@@ -17,5 +17,10 @@
         android:id="@+id/detailUserFragment"
         android:name="com.dicoding.faprayyy.githubuser.view.userdetail.DetailUserFragment"
         android:label="detail_user_fragment"
-        tools:layout="@layout/detail_user_fragment" />
+        tools:layout="@layout/detail_user_fragment" >
+
+        <argument
+            android:name="dataUser"
+            app:argType="com.dicoding.faprayyy.githubuser.datamodel.UserModel" />
+    </fragment>
 </navigation>

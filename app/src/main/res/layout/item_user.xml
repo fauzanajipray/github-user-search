@@ -23,11 +23,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            style="@style/App.TextView"
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/my_name"
-            android:textColor="@color/primaryColor"
             android:textSize="18sp"
             android:layout_marginStart="16dp"
             app:layout_constraintBottom_toTopOf="@+id/tv_username"
@@ -35,6 +35,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            style="@style/App.TextView.Sub"
             android:id="@+id/tv_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

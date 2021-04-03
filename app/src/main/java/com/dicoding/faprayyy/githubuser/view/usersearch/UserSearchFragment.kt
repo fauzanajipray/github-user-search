@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.faprayyy.githubuser.R
 import com.dicoding.faprayyy.githubuser.adapter.UserAdapter
@@ -62,18 +64,17 @@ class UserSearchFragment : Fragment() {
 
         adapter.setOnItemClickCallback(object: UserAdapter.OnItemClickCallback{
             override fun onItemClicked(data: UserModel) {
-                showSelectedHero(data)
+
+                val actionTo = UserSearchFragmentDirections.actionUserSearchFragmentToDetailUserFragment(data)
+                findNavController().navigate(actionTo)
             }
 
         })
 
     }
 
-    private fun showSelectedHero(data: UserModel) {
-        Toast.makeText(context, "Kamu memilih :"+ data.name, Toast.LENGTH_LONG).show()
-    }
 
-    private fun showLoading(state: Boolean) {
+    fun showLoading(state: Boolean) {
         if (state) {
             binding.progressBar.visibility = View.VISIBLE
         } else {
@@ -107,10 +108,16 @@ class UserSearchFragment : Fragment() {
                 if (newText.isEmpty()) {
                     adapter.setData(emptyList)
                     showTvSearchFirst(true)
+                    showLoading(false)
                 }
                 return true
             }
         })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
 }
