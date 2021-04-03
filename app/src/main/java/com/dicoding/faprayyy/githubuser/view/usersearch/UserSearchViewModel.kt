@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dicoding.faprayyy.githubuser.datamodel.UserModel
+import com.dicoding.faprayyy.githubuser.utils.properties
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import cz.msebera.android.httpclient.Header
@@ -12,7 +13,10 @@ import org.json.JSONObject
 
 class UserSearchViewModel : ViewModel() {
 
-    val apiKey = "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"
+    val apiKey1 = properties.apiKey1
+    val apiKey2 = properties.apiKey2
+    val apiKey3 = properties.apiKey3
+
     val listUsers = MutableLiveData<ArrayList<UserModel>>()
     val listItems = ArrayList<UserModel>()
 
@@ -20,8 +24,9 @@ class UserSearchViewModel : ViewModel() {
         listItems.clear()
 
         val client = AsyncHttpClient()
-        client.addHeader("Authorization", "token $apiKey")
+        client.addHeader("Authorization", "token $apiKey2")
         client.addHeader("User-Agent", "request")
+
         val url = "https://api.github.com/search/users?q=$query"
         client.get(url, object : AsyncHttpResponseHandler() {
             override fun onSuccess(
@@ -32,6 +37,7 @@ class UserSearchViewModel : ViewModel() {
                 try {
                     val jsonObjectResult = JSONObject(result)
                     val jsonArray = jsonObjectResult.getJSONArray("items")
+                    Log.d("CEK GET", jsonObjectResult.toString())
                     for (i in 0 until jsonArray.length()) {
                         val jsonObject = jsonArray.getJSONObject(i)
                         val login: String = jsonObject.getString("login")
@@ -48,14 +54,14 @@ class UserSearchViewModel : ViewModel() {
                 headers: Array<out Header>?,
                 responseBody: ByteArray?,
                 error: Throwable?) {
-                Log.e("onFailure", error?.message.toString())
+                Log.e("onFailure 1", error?.message.toString())
             }
         })
     }
 
     private fun getDataGitDetail(userName: String) {
         val client = AsyncHttpClient()
-        client.addHeader("Authorization", "token $apiKey")
+        client.addHeader("Authorization", "token $apiKey2")
         client.addHeader("User-Agent", "request")
         val url = "https://api.github.com/users/$userName"
         client.get(url, object : AsyncHttpResponseHandler() {
@@ -71,14 +77,17 @@ class UserSearchViewModel : ViewModel() {
                     val name: String = jsonObject.getString("name").toString()
                     val avatar: String = jsonObject.getString("avatar_url").toString()
                     val company: String = jsonObject.getString("company").toString()
+                    val bio: String = jsonObject.getString("bio").toString()
                     val location: String = jsonObject.getString("location").toString()
                     val repository: Int = jsonObject.getInt("public_repos")
                     val followers: Int = jsonObject.getInt("followers")
                     val following: Int = jsonObject.getInt("following")
                     listItems.add(
-                        UserModel(username,
+                        UserModel(
+                            username,
                             name,
                             avatar,
+                            bio,
                             company,
                             location,
                             repository,
@@ -100,7 +109,7 @@ class UserSearchViewModel : ViewModel() {
                 responseBody: ByteArray,
                 error: Throwable?
             ) {
-                Log.e("onFailure", error?.message.toString())
+                Log.e("onFailure 2", error?.message.toString())
             }
         })
     }

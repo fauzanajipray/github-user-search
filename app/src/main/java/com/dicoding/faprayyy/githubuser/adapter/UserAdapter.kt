@@ -30,6 +30,10 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.UserHolder>() {
 
     override fun onBindViewHolder(holder: UserHolder, position: Int) {
         holder.bind(mData[position])
+
+        holder.itemView.setOnClickListener{
+            onItemClickCallback.onItemClicked(mData[holder.adapterPosition])
+        }
     }
 
     override fun getItemCount(): Int {
@@ -47,6 +51,10 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.UserHolder>() {
                 .into(binding.imgPhoto)
         }
 
+    }
+
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback){
+        this.onItemClickCallback = onItemClickCallback
     }
 
     interface OnItemClickCallback {

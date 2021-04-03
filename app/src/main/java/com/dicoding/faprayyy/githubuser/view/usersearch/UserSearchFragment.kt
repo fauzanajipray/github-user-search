@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.faprayyy.githubuser.R
@@ -33,6 +34,8 @@ class UserSearchFragment : Fragment() {
     ): View {
         _binding = UserSearchFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        showTvSearchFirst(true)
         return view
     }
 
@@ -57,6 +60,17 @@ class UserSearchFragment : Fragment() {
             }
         }
 
+        adapter.setOnItemClickCallback(object: UserAdapter.OnItemClickCallback{
+            override fun onItemClicked(data: UserModel) {
+                showSelectedHero(data)
+            }
+
+        })
+
+    }
+
+    private fun showSelectedHero(data: UserModel) {
+        Toast.makeText(context, "Kamu memilih :"+ data.name, Toast.LENGTH_LONG).show()
     }
 
     private fun showLoading(state: Boolean) {
@@ -64,6 +78,14 @@ class UserSearchFragment : Fragment() {
             binding.progressBar.visibility = View.VISIBLE
         } else {
             binding.progressBar.visibility = View.GONE
+        }
+    }
+
+    private fun showTvSearchFirst(state: Boolean){
+        if (state) {
+            binding.tvSearchFirst.visibility = View.VISIBLE
+        } else {
+            binding.tvSearchFirst.visibility = View.GONE
         }
     }
 
@@ -76,6 +98,7 @@ class UserSearchFragment : Fragment() {
 
                     showLoading(true)
                     viewModel.setUser(query)
+                    showTvSearchFirst(false)
                 }
                 return true
             }
@@ -83,6 +106,7 @@ class UserSearchFragment : Fragment() {
             override fun onQueryTextChange(newText: String): Boolean {
                 if (newText.isEmpty()) {
                     adapter.setData(emptyList)
+                    showTvSearchFirst(true)
                 }
                 return true
             }

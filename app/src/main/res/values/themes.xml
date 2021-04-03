@@ -13,6 +13,10 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="App.TextView" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
     <style name="SplashScreen" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/black</item>
@@ -20,24 +24,35 @@
         <item name="colorOnPrimary">@color/white</item>
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
     </style>
-    <style name="cardViewItemDetail">
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">100dp</item>
-        <item name="android:layout_marginRight">1dp</item>
-        <item name="android:layout_marginLeft">1dp</item>
-        <item name="cardElevation">1dp</item>
-    </style>
-    <style name="linear_item_user">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:orientation">vertical</item>
-        <item name="android:layout_gravity">center</item>
+
+    // Button
+    <style name="App.ButtonText.Container" parent="Theme.GithubUser">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:foreground">?selectableItemBackgroundBorderless</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:paddingStart">24dp</item>
+        <item name="android:paddingEnd">24dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:layout_marginBottom">-1dp</item>
+        <item name="android:background">@drawable/bg_button_top_border</item>
     </style>
 
-    <style name="cardViewItemRepo">
+    <style name="App.ButtonText.PrimaryText" parent="App.TextView">
+        <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="cardCornerRadius">5dp</item>
-        <item name="cardElevation">2dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:layout_weight">1</item>
     </style>
+
+    <style name="App.ButtonText.ImageChevronRight" parent="Widget.MaterialComponents.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">12dp</item>
+        <item name="android:src">@drawable/ic_baseline_chevron_right_24</item>
+        <item name="android:tint">@android:color/darker_gray</item>
+    </style>
+
 </resources>

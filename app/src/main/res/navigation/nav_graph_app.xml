@@ -8,5 +8,14 @@
         android:id="@+id/userSearchFragment"
         android:name="com.dicoding.faprayyy.githubuser.view.usersearch.UserSearchFragment"
         android:label="user_search_fragment"
-        tools:layout="@layout/user_search_fragment" />
+        tools:layout="@layout/user_search_fragment" >
+        <action
+            android:id="@+id/action_userSearchFragment_to_detailUserFragment"
+            app:destination="@id/detailUserFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailUserFragment"
+        android:name="com.dicoding.faprayyy.githubuser.view.userdetail.DetailUserFragment"
+        android:label="detail_user_fragment"
+        tools:layout="@layout/detail_user_fragment" />
 </navigation>
