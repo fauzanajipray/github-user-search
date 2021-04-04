@@ -1,4 +1,4 @@
-package com.dicoding.faprayyy.githubuser.view.usersearch
+package com.dicoding.faprayyy.githubuser.view.moredetailuiser
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -9,24 +9,30 @@ import com.dicoding.faprayyy.githubuser.utils.utils
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import cz.msebera.android.httpclient.Header
+import org.json.JSONArray
 import org.json.JSONObject
 
-class UserSearchViewModel : ViewModel() {
+class FollowerFollowingViewModel : ViewModel() {
 
+    companion object{
+        val TAG = FollowerFollowingViewModel::class.java.simpleName
+    }
     val apiKey = utils.apiKey
 
-    val listUsers = MutableLiveData<ArrayList<UserModel>>()
-    val listItems = ArrayList<UserModel>()
-    val searchStateLive = MutableLiveData<Boolean>()
+    val listFollower = MutableLiveData<ArrayList<UserModel>>()
+    val listFollowing = MutableLiveData<ArrayList<UserModel>>()
 
-    fun setUser(query: String){
-        listItems.clear()
+    val listItemsFollower = ArrayList<UserModel>()
+    val listItemsFollowing = ArrayList<UserModel>()
+
+    fun setFollower(userName: String){
+        listItemsFollower.clear()
 
         val client = AsyncHttpClient()
         client.addHeader("Authorization", "token $apiKey")
         client.addHeader("User-Agent", "request")
 
-        val url = "https://api.github.com/search/users?q=$query"
+        val url = "https://api.github.com/$userName/followers"
         client.get(url, object : AsyncHttpResponseHandler() {
             override fun onSuccess(
                 statusCode: Int,
@@ -34,19 +40,14 @@ class UserSearchViewModel : ViewModel() {
                 responseBody: ByteArray) {
                 val result = String(responseBody)
                 try {
-                    val jsonObjectResult = JSONObject(result)
-                    val totalCount = jsonObjectResult.getInt("total_count")
-                    if (totalCount != 0){
-                        val jsonArray = jsonObjectResult.getJSONArray("items")
-                        for (i in 0 until jsonArray.length()) {
-                            val jsonObject = jsonArray.getJSONObject(i)
-                            val login: String = jsonObject.getString("login")
-                            getDataGitDetail(login)
-                        }
-                        searchStateLive.postValue(true)
-                    } else {
-                        searchStateLive.postValue(false)
+                    val jsonArray = JSONArray(result)
+                    Log.d(TAG, "DATA FOLLOWER : ${jsonArray}")
+                    for (i in 0 until jsonArray.length()) {
+                        val jsonObject = jsonArray.getJSONObject(i)
+                        val login: String = jsonObject.getString("login")
+                        getDataUserDetail(login)
                     }
+
                 } catch (e: Exception) {
                     Log.e("Exception", e.message.toString())
                     e.printStackTrace()
@@ -62,7 +63,7 @@ class UserSearchViewModel : ViewModel() {
         })
     }
 
-    private fun getDataGitDetail(userName: String) {
+    private fun getDataUserDetail(userName: String) {
         val client = AsyncHttpClient()
         client.addHeader("Authorization", "token $apiKey")
         client.addHeader("User-Agent", "request")
@@ -85,7 +86,7 @@ class UserSearchViewModel : ViewModel() {
                     val repository: Int = jsonObject.getInt("public_repos")
                     val followers: Int = jsonObject.getInt("followers")
                     val following: Int = jsonObject.getInt("following")
-                    listItems.add(
+                    listItemsFollower.add(
                         UserModel(
                             username,
                             name,
@@ -98,7 +99,7 @@ class UserSearchViewModel : ViewModel() {
                             following
                         )
                     )
-                    listUsers.postValue(listItems)
+                    listFollower.postValue(listItemsFollower)
 
                 } catch (e: Exception) {
                     Log.e("Exception", e.message.toString())
@@ -117,11 +118,8 @@ class UserSearchViewModel : ViewModel() {
         })
     }
 
-    fun getUsers(): LiveData<ArrayList<UserModel>> {
-        return listUsers
+    fun getFollower(): LiveData<ArrayList<UserModel>> {
+        Log.d("INI DATA LIVE", listFollower.toString())
+        return listFollower
     }
-    fun getStateSearch(): LiveData<Boolean> {
-        return searchStateLive
-    }
-
 }

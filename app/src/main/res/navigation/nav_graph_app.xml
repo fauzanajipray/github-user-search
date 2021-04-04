@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_userSearchFragment_to_detailUserFragment"
             app:destination="@id/detailUserFragment" />
+        <action
+            android:id="@+id/action_userSearchFragment_to_aboutMeFragment"
+            app:destination="@id/aboutMeFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailUserFragment"
@@ -22,5 +25,24 @@
         <argument
             android:name="dataUser"
             app:argType="com.dicoding.faprayyy.githubuser.datamodel.UserModel" />
+        <action
+            android:id="@+id/action_detailUserFragment_to_followerFollowingFragment"
+            app:destination="@id/followerFollowingFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/followerFollowingFragment"
+        android:name="com.dicoding.faprayyy.githubuser.view.moredetailuiser.FollowerFollowingFragment"
+        android:label="follower_following_fragment"
+        tools:layout="@layout/follower_following_fragment" >
+        <action
+            android:id="@+id/action_followerFollowingFragment_to_detailUserFragment"
+            app:destination="@id/detailUserFragment" />
+        <argument android:name="UserName"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/aboutMeFragment"
+        android:name="com.dicoding.faprayyy.githubuser.view.AboutMeFragment"
+        android:label="AboutMeFragment" />
+
 </navigation>

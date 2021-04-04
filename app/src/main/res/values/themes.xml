@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.GithubUser" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.GithubUser" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryVariant">@color/primaryDarkColor</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -13,9 +13,17 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="Theme.Toolbar" parent="">
+        <!--This line changes the color of text in Toolbar-->
+        <item name="android:textColorPrimary">@color/black</item>
+        <!--This line changes the color of icons in toolbar (back, overflow menu icons)-->
+        <item name="android:textColorSecondary">@color/white</item>
+    </style>
+
     <style name="App.TextView" parent="Widget.MaterialComponents.TextView">
         <item name="android:textColor">@color/primaryColor</item>
     </style>
+
     <style name="App.TextView.Sub" parent="Widget.MaterialComponents.TextView">
         <item name="android:textColor">@color/primaryLightColor</item>
     </style>
@@ -29,6 +37,7 @@
     </style>
 
     // Button
+
     <style name="App.ButtonText.Container" parent="Theme.GithubUser">
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
@@ -56,6 +65,11 @@
         <item name="android:layout_marginStart">12dp</item>
         <item name="android:src">@drawable/ic_baseline_chevron_right_24</item>
         <item name="android:tint">@color/primaryColor</item>
+    </style>
+
+    <style name="ThemeOverlay.GithubUser.FullscreenContainer" parent="">
+        <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
+        <item name="fullscreenTextColor">@color/light_blue_A200</item>
     </style>
 
 </resources>

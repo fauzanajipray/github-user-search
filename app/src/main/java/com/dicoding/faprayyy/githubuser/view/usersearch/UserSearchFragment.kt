@@ -1,15 +1,12 @@
 package com.dicoding.faprayyy.githubuser.view.usersearch
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
+import android.view.*
 import androidx.appcompat.widget.SearchView
-import androidx.navigation.Navigation
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.faprayyy.githubuser.R
@@ -20,7 +17,8 @@ import com.dicoding.faprayyy.githubuser.datamodel.UserModel
 class UserSearchFragment : Fragment() {
 
     companion object {
-        val TAG = UserSearchFragment::class.java.simpleName
+        var stateTvSearchMsg = true
+        var stateUserNotFound = false
     }
 
     private var _binding: UserSearchFragmentBinding? = null
@@ -37,9 +35,12 @@ class UserSearchFragment : Fragment() {
         _binding = UserSearchFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        showTvSearchFirst(true)
+        setUpToolbar()
+        showTvSearchFirst(stateTvSearchMsg)
+
         return view
     }
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -54,25 +55,30 @@ class UserSearchFragment : Fragment() {
         searchData()
 
         viewModel.getUsers().observe(viewLifecycleOwner) { userItems ->
-            Log.d("CEK _$TAG", userItems.toString())
             if (userItems != null) {
-                Log.d("CEK $TAG", userItems.toString())
                 adapter.setData(userItems)
                 showLoading(false)
             }
         }
 
-        adapter.setOnItemClickCallback(object: UserAdapter.OnItemClickCallback{
-            override fun onItemClicked(data: UserModel) {
+        viewModel.getStateSearch().observe(viewLifecycleOwner){ state ->
+            if (!state){
+                stateUserNotFound = true
+                showLoading(false)
+                showTvSearchFirst(true)
+            }
+        }
 
-                val actionTo = UserSearchFragmentDirections.actionUserSearchFragmentToDetailUserFragment(data)
+        adapter.setOnItemClickCallback(object : UserAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: UserModel) {
+                val actionTo =
+                    UserSearchFragmentDirections.actionUserSearchFragmentToDetailUserFragment(
+                        data
+                    )
                 findNavController().navigate(actionTo)
             }
-
         })
-
     }
-
 
     fun showLoading(state: Boolean) {
         if (state) {
@@ -83,11 +89,12 @@ class UserSearchFragment : Fragment() {
     }
 
     private fun showTvSearchFirst(state: Boolean){
-        if (state) {
-            binding.tvSearchFirst.visibility = View.VISIBLE
-        } else {
-            binding.tvSearchFirst.visibility = View.GONE
-        }
+        val userNotFoundMsg = resources.getString(R.string.user_not_found)
+        val searchFirstMsg = resources.getString(R.string.please_search_first)
+        val tv = binding.tvSearchFirst
+        if (state) tv.visibility = View.VISIBLE else tv.visibility = View.GONE
+        if (stateUserNotFound) tv.text = userNotFoundMsg  else tv.text = searchFirstMsg
+
     }
 
     private fun searchData() {
@@ -96,23 +103,40 @@ class UserSearchFragment : Fragment() {
                 if (query.isEmpty()) {
                     return false
                 } else {
-
+                    adapter.setData(emptyList)
+                    showTvSearchFirst(false)
                     showLoading(true)
                     viewModel.setUser(query)
-                    showTvSearchFirst(false)
                 }
                 return true
             }
-
             override fun onQueryTextChange(newText: String): Boolean {
                 if (newText.isEmpty()) {
                     adapter.setData(emptyList)
-                    showTvSearchFirst(true)
                     showLoading(false)
+                    stateUserNotFound = false
+                    showTvSearchFirst(stateTvSearchMsg)
                 }
                 return true
             }
         })
+    }
+
+    private fun setUpToolbar(){
+        binding.toolbarId.apply {
+            setTitle(R.string.app_name)
+            inflateMenu(R.menu.main_menu)
+            setOnMenuItemClickListener(object : Toolbar.OnMenuItemClickListener{
+                override fun onMenuItemClick(item: MenuItem?): Boolean {
+                    when(item?.itemId){
+                        R.id.menu_item_about -> {
+                            findNavController().navigate(UserSearchFragmentDirections.actionUserSearchFragmentToAboutMeFragment())
+                        }
+                    }
+                    return true
+                }
+            })
+        }
     }
 
     override fun onDestroy() {

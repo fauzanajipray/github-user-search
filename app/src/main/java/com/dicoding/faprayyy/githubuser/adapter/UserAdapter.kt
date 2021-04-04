@@ -1,6 +1,5 @@
 package com.dicoding.faprayyy.githubuser.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,15 +9,26 @@ import com.bumptech.glide.request.RequestOptions
 import com.dicoding.faprayyy.githubuser.R
 import com.dicoding.faprayyy.githubuser.databinding.ItemUserBinding
 import com.dicoding.faprayyy.githubuser.datamodel.UserModel
+import com.dicoding.faprayyy.githubuser.view.usersearch.UserSearchFragment
 
 class UserAdapter : RecyclerView.Adapter<UserAdapter.UserHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
     private val mData = ArrayList<UserModel>()
 
+    companion object{
+        var adapterEmpty = true
+    }
+
+    init {
+        adapterEmpty = mData.toString() == "[]"
+    }
+
     fun setData(items: ArrayList<UserModel>) {
         mData.clear()
         mData.addAll(items)
+        adapterEmpty = mData.toString() == "[]"
+        UserSearchFragment.stateTvSearchMsg = adapterEmpty
         notifyDataSetChanged()
     }
 
