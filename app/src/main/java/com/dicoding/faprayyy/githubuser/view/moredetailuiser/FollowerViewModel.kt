@@ -12,27 +12,25 @@ import cz.msebera.android.httpclient.Header
 import org.json.JSONArray
 import org.json.JSONObject
 
-class FollowerFollowingViewModel : ViewModel() {
+class FollowerViewModel : ViewModel() {
 
     companion object{
-        val TAG = FollowerFollowingViewModel::class.java.simpleName
+        val TAG = this::class.java.simpleName
     }
     val apiKey = utils.apiKey
 
     val listFollower = MutableLiveData<ArrayList<UserModel>>()
-    val listFollowing = MutableLiveData<ArrayList<UserModel>>()
-
     val listItemsFollower = ArrayList<UserModel>()
-    val listItemsFollowing = ArrayList<UserModel>()
 
     fun setFollower(userName: String){
         listItemsFollower.clear()
+        Log.d(TAG, "DATA FOLLOWER1 : $userName , $listItemsFollower")
 
         val client = AsyncHttpClient()
         client.addHeader("Authorization", "token $apiKey")
         client.addHeader("User-Agent", "request")
 
-        val url = "https://api.github.com/$userName/followers"
+        val url = "https://api.github.com/users/$userName/followers"
         client.get(url, object : AsyncHttpResponseHandler() {
             override fun onSuccess(
                 statusCode: Int,
@@ -41,7 +39,7 @@ class FollowerFollowingViewModel : ViewModel() {
                 val result = String(responseBody)
                 try {
                     val jsonArray = JSONArray(result)
-                    Log.d(TAG, "DATA FOLLOWER : ${jsonArray}")
+                    Log.d(TAG, "DATA FOLLOWER2 : ${jsonArray}")
                     for (i in 0 until jsonArray.length()) {
                         val jsonObject = jsonArray.getJSONObject(i)
                         val login: String = jsonObject.getString("login")
@@ -117,9 +115,7 @@ class FollowerFollowingViewModel : ViewModel() {
             }
         })
     }
-
     fun getFollower(): LiveData<ArrayList<UserModel>> {
-        Log.d("INI DATA LIVE", listFollower.toString())
         return listFollower
     }
 }

@@ -9,6 +9,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.dicoding.faprayyy.githubuser.databinding.DetailUserFragmentBinding
+import com.dicoding.faprayyy.githubuser.utils.ConvertNullToString
 import com.dicoding.faprayyy.githubuser.view.usersearch.UserSearchFragment
 
 class DetailUserFragment : Fragment() {
@@ -30,15 +31,15 @@ class DetailUserFragment : Fragment() {
         val view = binding.root
 
         binding.apply {
-            tvName.text = args.dataUser.name?.let { checkNull(it) }
-            tvUserName.text = args.dataUser.username?.let { checkNull(it) }
-            tvBio.text = args.dataUser.bio?.let { checkNull(it) }
-            tvCompany.text = args.dataUser.company?.let { checkNull(it) }
-            tvLocation.text = args.dataUser.location?.let { checkNull(it) }
+            tvName.text = args.dataUser.name?.let { ConvertNullToString(it) }
+            tvUserName.text = args.dataUser.username?.let { ConvertNullToString(it) }
+            tvBio.text = args.dataUser.bio?.let { ConvertNullToString(it) }
+            tvCompany.text = args.dataUser.company?.let { ConvertNullToString(it) }
+            tvLocation.text = args.dataUser.location?.let { ConvertNullToString(it) }
             tvRepoCount.text = args.dataUser.repository.toString()
             tvFollowersCount.text = args.dataUser.follower.toString()
             tvFollowingCount.text = args.dataUser.following.toString()
-            val convertText = "${convert_text(args.dataUser.follower)} followers ▪️ ${convert_text(args.dataUser.following)} following"
+            val convertText = "${convertintvalue(args.dataUser.follower)} followers ▪️ ${convertintvalue(args.dataUser.following)} following"
             tvFollowersFollowing.text = convertText
         }
 
@@ -63,22 +64,16 @@ class DetailUserFragment : Fragment() {
 
         binding.apply {
             btnFollowers.setOnClickListener{
-                Toast.makeText(activity, "BTN FOLLOWER CLICK", Toast.LENGTH_SHORT).show()
                 val actionTo = DetailUserFragmentDirections.actionDetailUserFragmentToFollowerFollowingFragment(username)
+                actionTo.position = 0
                 findNavController().navigate(actionTo)
             }
             btnFollowing.setOnClickListener{
-                Toast.makeText(activity, "BTN FOLLOWING CLICK", Toast.LENGTH_SHORT).show()
+                val actionTo = DetailUserFragmentDirections.actionDetailUserFragmentToFollowerFollowingFragment(username)
+                actionTo.position = 1
+                findNavController().navigate(actionTo)
             }
         }
-    }
-
-
-    private fun checkNull(string: String): String{
-        if (string == "null"){
-            return "-"
-        }
-        return string
     }
 
     override fun onDestroy() {

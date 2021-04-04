@@ -1,7 +1,6 @@
 package com.dicoding.faprayyy.githubuser.view.usersearch
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
@@ -44,14 +43,12 @@ class UserSearchFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(UserSearchViewModel::class.java)
 
+        viewModel = ViewModelProvider(this).get(UserSearchViewModel::class.java)
         adapter = UserAdapter()
         adapter.notifyDataSetChanged()
-
         binding.rvUser.layoutManager = LinearLayoutManager(activity)
         binding.rvUser.adapter = adapter
-
         searchData()
 
         viewModel.getUsers().observe(viewLifecycleOwner) { userItems ->

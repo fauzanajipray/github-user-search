@@ -4,7 +4,7 @@ import android.util.Log
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-fun convert_text(value: Int): String{
+fun convertintvalue(value: Int): String{
     val convertValue = value
 
     if(value >= 1000000){

@@ -14,7 +14,7 @@
             app:destination="@id/detailUserFragment" />
         <action
             android:id="@+id/action_userSearchFragment_to_aboutMeFragment"
-            app:destination="@id/aboutMeFragment" />
+            app:destination="@id/aboutMeFragment"/>
     </fragment>
     <fragment
         android:id="@+id/detailUserFragment"
@@ -39,6 +39,10 @@
             app:destination="@id/detailUserFragment" />
         <argument android:name="UserName"
             app:argType="string" />
+        <argument
+            android:name="position"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
     <fragment
         android:id="@+id/aboutMeFragment"

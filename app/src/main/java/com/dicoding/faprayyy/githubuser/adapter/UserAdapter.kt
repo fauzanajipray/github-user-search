@@ -9,6 +9,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.dicoding.faprayyy.githubuser.R
 import com.dicoding.faprayyy.githubuser.databinding.ItemUserBinding
 import com.dicoding.faprayyy.githubuser.datamodel.UserModel
+import com.dicoding.faprayyy.githubuser.utils.ConvertNullToString
 import com.dicoding.faprayyy.githubuser.view.usersearch.UserSearchFragment
 
 class UserAdapter : RecyclerView.Adapter<UserAdapter.UserHolder>() {
@@ -52,7 +53,7 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.UserHolder>() {
     inner class UserHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemUserBinding.bind(itemView)
         fun bind(user: UserModel) {
-            binding.tvName.text = user.name?.let { checkNull(it) }
+            binding.tvName.text = user.name?.let { ConvertNullToString(it) }
             binding.tvUsername.text = user.username
             Glide.with(itemView.context)
                 .load(user.avatar)
@@ -68,13 +69,6 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.UserHolder>() {
 
     interface OnItemClickCallback {
         fun onItemClicked(data: UserModel)
-    }
-
-    private fun checkNull(string: String): String{
-        if (string == "null"){
-            return "-"
-        }
-        return string
     }
 
 }
