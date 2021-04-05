@@ -39,6 +39,7 @@ class DetailUserFragment : Fragment() {
             tvRepoCount.text = args.dataUser.repository.toString()
             tvFollowersCount.text = args.dataUser.follower.toString()
             tvFollowingCount.text = args.dataUser.following.toString()
+            titleActionBar.text = args.dataUser.name?.let{ ConvertNullToString(it)}
             val convertText = "${convertintvalue(args.dataUser.follower)} followers ▪️ ${convertintvalue(args.dataUser.following)} following"
             tvFollowersFollowing.text = convertText
         }

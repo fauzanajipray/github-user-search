@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/my_name"
-            android:textSize="24sp"
+            android:textSize="@dimen/text_header"
             android:textStyle="bold"
             android:textColor="@color/primaryLightColor"
             android:layout_gravity="center_horizontal"
@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_size"
             android:textColor="@color/primaryLightColor"
             android:text="@string/my_email"
             android:layout_gravity="center_horizontal" />

@@ -17,7 +17,17 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:navigationIcon="@drawable/ic_baseline_chevron_left_24_white"/>
+            app:navigationIcon="@drawable/ic_baseline_chevron_left_24_white">
+            <TextView
+                android:id="@+id/titleActionBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@string/my_name"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:textColor="@color/white" />
+        </androidx.appcompat.widget.Toolbar>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -46,8 +56,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="8dp"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
+                    android:textSize="@dimen/text_header"
                     app:layout_constraintBottom_toTopOf="@id/tv_user_name"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/iv_user_pic"
@@ -62,7 +71,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginBottom="8dp"
-                    android:textSize="15sp"
+                    android:textSize="@dimen/text_size"
                     app:layout_constraintBottom_toBottomOf="@id/iv_user_pic"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/iv_user_pic"
@@ -78,7 +87,7 @@
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="20dp"
                     android:maxLines="4"
-                    android:textSize="15sp"
+                    android:textSize="@dimen/text_size"
                     app:layout_constraintTop_toBottomOf="@id/iv_user_pic"
                     tools:text="@tools:sample/lorem/random"
                     tools:visibility="visible" />
@@ -99,7 +108,7 @@
                     android:layout_marginTop="12dp"
                     android:drawablePadding="12dp"
                     android:gravity="center_vertical"
-                    android:textSize="15sp"
+                    android:textSize="@dimen/text_size"
                     app:layout_constraintTop_toBottomOf="@id/tv_bio_margin"
                     tools:text="Company"
                     tools:visibility="visible"
@@ -114,7 +123,7 @@
                     android:layout_marginTop="8dp"
                     android:drawablePadding="12dp"
                     android:gravity="center_vertical"
-                    android:textSize="15sp"
+                    android:textSize="@dimen/text_size"
                     app:layout_constraintTop_toBottomOf="@id/tv_company"
                     tools:text="Jakarta, ID"
                     tools:visibility="visible"
@@ -130,7 +139,7 @@
                     android:layout_marginBottom="20dp"
                     android:drawablePadding="12dp"
                     android:gravity="center_vertical"
-                    android:textSize="15sp"
+                    android:textSize="@dimen/text_size"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_location"
                     tools:text="1k followers ▪️ 1k following"

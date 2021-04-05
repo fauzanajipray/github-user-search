@@ -39,6 +39,7 @@ class FollowerFollowingFragment : Fragment() {
     }
 
     private fun setupToolbar() {
+
         binding.toolbarId.setNavigationOnClickListener(object : View.OnClickListener{
             override fun onClick(v: View?) {
                 getActivity()?.onBackPressed();
@@ -54,7 +55,6 @@ class FollowerFollowingFragment : Fragment() {
         val tabs: TabLayout = binding.tabs
         TabLayoutMediator(tabs, viewPager) { tab, position ->
             tab.text= resources.getString(TAB_TITLES[position])
-            tab.
         }.attach()
 
     }
