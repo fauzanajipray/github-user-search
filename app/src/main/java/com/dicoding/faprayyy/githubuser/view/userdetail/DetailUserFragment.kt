@@ -1,13 +1,15 @@
 package com.dicoding.faprayyy.githubuser.view.userdetail
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.dicoding.faprayyy.githubuser.R
 import com.dicoding.faprayyy.githubuser.databinding.DetailUserFragmentBinding
 import com.dicoding.faprayyy.githubuser.utils.ConvertNullToString
 import com.dicoding.faprayyy.githubuser.view.usersearch.UserSearchFragment
@@ -23,6 +25,7 @@ class DetailUserFragment : Fragment() {
 
     private val args by navArgs<DetailUserFragmentArgs>()
 
+    @SuppressLint("StringFormatMatches")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,8 +43,12 @@ class DetailUserFragment : Fragment() {
             tvFollowersCount.text = args.dataUser.follower.toString()
             tvFollowingCount.text = args.dataUser.following.toString()
             titleActionBar.text = args.dataUser.name?.let{ ConvertNullToString(it)}
-            val convertText = "${convertintvalue(args.dataUser.follower)} followers ▪️ ${convertintvalue(args.dataUser.following)} following"
-            tvFollowersFollowing.text = convertText
+
+            val follower : String = convertintvalue(args.dataUser.follower)
+            val following : String = convertintvalue(args.dataUser.following)
+            val text = getString(R.string.followerfollowing, follower, following)
+            Log.d(TAG,"$follower, $following, $text")
+            tvFollowersFollowing.text = text
         }
 
         Glide.with(view)

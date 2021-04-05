@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 app:iconifiedByDefault="false"
                 app:queryBackground="@android:color/transparent"
-                app:queryHint="Search User" />
+                app:queryHint="@string/search_user" />
 
         </androidx.cardview.widget.CardView>
 

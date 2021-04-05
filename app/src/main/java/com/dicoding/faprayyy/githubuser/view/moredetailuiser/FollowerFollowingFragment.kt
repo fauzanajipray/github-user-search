@@ -1,6 +1,5 @@
 package com.dicoding.faprayyy.githubuser.view.moredetailuiser
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
 import android.view.*

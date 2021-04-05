@@ -98,6 +98,7 @@ class UserSearchViewModel : ViewModel() {
                             following
                         )
                     )
+                    Log.d("CEK", "GET USER + $listItems")
                     listUsers.postValue(listItems)
 
                 } catch (e: Exception) {
@@ -118,6 +119,7 @@ class UserSearchViewModel : ViewModel() {
     }
 
     fun getUsers(): LiveData<ArrayList<UserModel>> {
+        Log.d("CEK", "GET USER + $listItems")
         return listUsers
     }
     fun getStateSearch(): LiveData<Boolean> {

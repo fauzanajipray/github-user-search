@@ -1,7 +1,6 @@
 package com.dicoding.faprayyy.githubuser.view.moredetailuiser
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,8 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.faprayyy.githubuser.adapter.UserAdapter
 import com.dicoding.faprayyy.githubuser.databinding.FragmentFollowerBinding
 import com.dicoding.faprayyy.githubuser.datamodel.UserModel
-import com.dicoding.faprayyy.githubuser.view.usersearch.UserSearchFragmentDirections
-
 
 class FollowerFragment : Fragment() {
 

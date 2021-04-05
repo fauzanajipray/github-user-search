@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Github User</string>
+
+    <string name="about_me">Tentang Saya</string>
+
+    <string name="my_name">Fauzan Aji Prayoga</string>
+    <string name="my_username">faprayyy</string>
+    <string name="my_email">fauzanjr1@gmail.com</string>
+
+    <string name="tab_text_1">Pengikut</string>
+    <string name="tab_text_2">Mengikuti</string>
+    <string name="tab_text_3">Repositori</string>
+
+    <string name="please_search_first">Tolong cari dahulu</string>
+    <string name="user_not_found">Pengguna tidak di temukan!</string>
+    <string name="search_user">Cari pengguna…</string>
+
+    <string name="followerfollowing">%1$s pengikut ▪️ %2$s mengikuti</string>
+    <string name="change_languange">Ganti bahasa</string>
+</resources>

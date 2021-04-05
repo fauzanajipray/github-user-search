@@ -159,7 +159,7 @@
 
             <TextView
                 style="@style/App.ButtonText.PrimaryText"
-                android:text="@string/repositories" />
+                android:text="@string/tab_text_3" />
 
             <TextView
                 style="@style/App.TextView.Sub"
@@ -180,7 +180,7 @@
 
             <TextView
                 style="@style/App.ButtonText.PrimaryText"
-                android:text="@string/followers" />
+                android:text="@string/tab_text_1" />
 
             <TextView
                 style="@style/App.TextView.Sub"
@@ -201,7 +201,7 @@
 
             <TextView
                 style="@style/App.ButtonText.PrimaryText"
-                android:text="@string/following" />
+                android:text="@string/tab_text_2" />
 
             <TextView
                 style="@style/App.TextView.Sub"

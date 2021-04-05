@@ -2,8 +2,6 @@ package com.dicoding.faprayyy.githubuser.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
-import com.dicoding.faprayyy.githubuser.R
 import com.dicoding.faprayyy.githubuser.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

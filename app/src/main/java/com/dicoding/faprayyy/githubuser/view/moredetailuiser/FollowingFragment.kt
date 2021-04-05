@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.faprayyy.githubuser.adapter.UserAdapter
 import com.dicoding.faprayyy.githubuser.databinding.FragmentFollowingBinding
 import com.dicoding.faprayyy.githubuser.datamodel.UserModel
-import com.dicoding.faprayyy.githubuser.view.usersearch.UserSearchFragmentDirections
-
 
 class FollowingFragment : Fragment() {
 

@@ -7,5 +7,10 @@
         android:icon="@drawable/ic_baseline_more_vert_24_white"
         android:title="@string/about_me"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_item_languange"
+        android:icon="@drawable/ic_baseline_more_vert_24_white"
+        android:title="@string/change_languange"
+        app:showAsAction="never" />
 
 </menu>

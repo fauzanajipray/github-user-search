@@ -1,6 +1,8 @@
 package com.dicoding.faprayyy.githubuser.view.usersearch
 
+import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
@@ -23,7 +25,6 @@ class UserSearchFragment : Fragment() {
     private var _binding: UserSearchFragmentBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter: UserAdapter
-
     private lateinit var viewModel: UserSearchViewModel
     val emptyList = ArrayList<UserModel>()
 
@@ -129,6 +130,11 @@ class UserSearchFragment : Fragment() {
                         R.id.menu_item_about -> {
                             findNavController().navigate(UserSearchFragmentDirections.actionUserSearchFragmentToAboutMeFragment())
                         }
+                        R.id.menu_item_languange -> {
+                            val mIntent = Intent(Settings.ACTION_LOCALE_SETTINGS)
+                            startActivity(mIntent)
+                        }
+
                     }
                     return true
                 }
