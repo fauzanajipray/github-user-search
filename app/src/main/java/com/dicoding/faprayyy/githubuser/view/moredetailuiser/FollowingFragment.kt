@@ -1,5 +1,6 @@
 package com.dicoding.faprayyy.githubuser.view.moredetailuiser
 
+import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -15,15 +16,10 @@ import com.dicoding.faprayyy.githubuser.datamodel.UserModel
 
 class FollowingFragment : Fragment() {
 
-    companion object{
-        val TAG = FollowerFragment::class.java.simpleName
-    }
-
     private lateinit var viewModel: FollowingViewModel
     private var _binding: FragmentFollowingBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding as FragmentFollowingBinding
     private lateinit var FollowingAdapter: UserAdapter
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,11 +40,15 @@ class FollowingFragment : Fragment() {
             adapter = FollowingAdapter
         }
 
-        Log.d(TAG,  FollowerFollowingFragment.EXTRA_USERNAME)
         viewModel.setFollowing( FollowerFollowingFragment.EXTRA_USERNAME)
         viewModel.getFollowing().observe(viewLifecycleOwner) { followingList ->
             if (followingList != null) {
                 FollowingAdapter.setData(followingList)
+                showLoading(false)
+            }
+        }
+        viewModel.getStateSearch().observe(viewLifecycleOwner){ state ->
+            if (!state){
                 showLoading(false)
             }
         }
@@ -63,7 +63,7 @@ class FollowingFragment : Fragment() {
         })
     }
 
-    private fun showLoading(state: Boolean) {
+    fun showLoading(state: Boolean) {
         if (state) {
             binding.progressBar.visibility = View.VISIBLE
         } else {

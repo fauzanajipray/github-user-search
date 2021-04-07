@@ -4,7 +4,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.app.AppCompatDelegate
+import com.bumptech.glide.Glide
 import com.dicoding.faprayyy.githubuser.databinding.ActivitySplashBinding
 
 class SplashActivity : AppCompatActivity() {
@@ -16,7 +18,10 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val handler = Handler()
+        binding.imgIconSplash
+
+
+        val handler = Handler(Looper.getMainLooper())
         handler.postDelayed({
 
             val i = Intent(this, MainActivity::class.java)

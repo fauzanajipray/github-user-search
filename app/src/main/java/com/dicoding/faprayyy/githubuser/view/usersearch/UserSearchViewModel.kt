@@ -1,9 +1,13 @@
 package com.dicoding.faprayyy.githubuser.view.usersearch
 
+import android.app.Application
 import android.util.Log
+import android.widget.Toast
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.dicoding.faprayyy.githubuser.R
 import com.dicoding.faprayyy.githubuser.datamodel.UserModel
 import com.dicoding.faprayyy.githubuser.utils.utils
 import com.loopj.android.http.AsyncHttpClient
@@ -11,13 +15,18 @@ import com.loopj.android.http.AsyncHttpResponseHandler
 import cz.msebera.android.httpclient.Header
 import org.json.JSONObject
 
-class UserSearchViewModel : ViewModel() {
+class UserSearchViewModel(application: Application) : AndroidViewModel(application) {
 
     val apiKey = utils.apiKey
 
     val listUsers = MutableLiveData<ArrayList<UserModel>>()
     val listItems = ArrayList<UserModel>()
     val searchStateLive = MutableLiveData<Boolean>()
+    private val context = getApplication<Application>().applicationContext
+
+    companion object{
+        var notFoundText = "not_found"
+    }
 
     fun setUser(query: String){
         listItems.clear()
@@ -46,6 +55,7 @@ class UserSearchViewModel : ViewModel() {
                         searchStateLive.postValue(true)
                     } else {
                         searchStateLive.postValue(false)
+                        Toast.makeText(context, notFoundText , Toast.LENGTH_SHORT).show()
                     }
                 } catch (e: Exception) {
                     Log.e("Exception", e.message.toString())
@@ -98,7 +108,6 @@ class UserSearchViewModel : ViewModel() {
                             following
                         )
                     )
-                    Log.d("CEK", "GET USER + $listItems")
                     listUsers.postValue(listItems)
 
                 } catch (e: Exception) {
@@ -120,6 +129,7 @@ class UserSearchViewModel : ViewModel() {
 
     fun getUsers(): LiveData<ArrayList<UserModel>> {
         Log.d("CEK", "GET USER + $listItems")
+        UserSearchFragment.stateTvSearchMsg = listItems.toString() == "[]"
         return listUsers
     }
     fun getStateSearch(): LiveData<Boolean> {

@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.dicoding.faprayyy.githubuser.R
 import com.dicoding.faprayyy.githubuser.databinding.DetailUserFragmentBinding
-import com.dicoding.faprayyy.githubuser.utils.ConvertNullToString
+import com.dicoding.faprayyy.githubuser.utils.convertNullToString
 import com.dicoding.faprayyy.githubuser.view.usersearch.UserSearchFragment
 
 class DetailUserFragment : Fragment() {
@@ -21,7 +21,7 @@ class DetailUserFragment : Fragment() {
     }
 
     private var _binding: DetailUserFragmentBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding as DetailUserFragmentBinding
 
     private val args by navArgs<DetailUserFragmentArgs>()
 
@@ -34,20 +34,22 @@ class DetailUserFragment : Fragment() {
         val view = binding.root
 
         binding.apply {
-            tvName.text = args.dataUser.name?.let { ConvertNullToString(it) }
-            tvUserName.text = args.dataUser.username?.let { ConvertNullToString(it) }
-            tvBio.text = args.dataUser.bio?.let { ConvertNullToString(it) }
-            tvCompany.text = args.dataUser.company?.let { ConvertNullToString(it) }
-            tvLocation.text = args.dataUser.location?.let { ConvertNullToString(it) }
+            tvName.text = args.dataUser.name?.let { convertNullToString(it) }
+            tvUserName.text = args.dataUser.username?.let { convertNullToString(it) }
+            tvBio.text = args.dataUser.bio?.let { convertNullToString(it) }
+            tvCompany.text = args.dataUser.company?.let { convertNullToString(it) }
+            tvLocation.text = args.dataUser.location?.let { convertNullToString(it) }
             tvRepoCount.text = args.dataUser.repository.toString()
             tvFollowersCount.text = args.dataUser.follower.toString()
             tvFollowingCount.text = args.dataUser.following.toString()
-            titleActionBar.text = args.dataUser.name?.let{ ConvertNullToString(it)}
+            titleActionBar.text = args.dataUser.name?.let{ convertNullToString(it)}
 
-            val follower : String = convertintvalue(args.dataUser.follower)
-            val following : String = convertintvalue(args.dataUser.following)
+            val follower : String = convertIntValue(args.dataUser.follower)
+            val following : String = convertIntValue(args.dataUser.following)
             val text = getString(R.string.followerfollowing, follower, following)
             Log.d(TAG,"$follower, $following, $text")
+
+
             tvFollowersFollowing.text = text
         }
 
@@ -64,11 +66,7 @@ class DetailUserFragment : Fragment() {
 
         val username = args.dataUser.username as String
 
-        binding.toolbarId.setNavigationOnClickListener(object : View.OnClickListener{
-            override fun onClick(v: View?) {
-                getActivity()?.onBackPressed();
-            }
-        })
+        binding.toolbarId.setNavigationOnClickListener { activity?.onBackPressed(); }
 
         binding.apply {
             btnFollowers.setOnClickListener{

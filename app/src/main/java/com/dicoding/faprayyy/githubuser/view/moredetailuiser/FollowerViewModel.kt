@@ -1,30 +1,40 @@
 package com.dicoding.faprayyy.githubuser.view.moredetailuiser
 
+import android.app.Application
 import android.util.Log
+import android.widget.Toast
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dicoding.faprayyy.githubuser.datamodel.UserModel
 import com.dicoding.faprayyy.githubuser.utils.utils
+import com.dicoding.faprayyy.githubuser.view.usersearch.UserSearchViewModel
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import cz.msebera.android.httpclient.Header
 import org.json.JSONArray
 import org.json.JSONObject
 
-class FollowerViewModel : ViewModel() {
+class FollowerViewModel(application: Application) : AndroidViewModel(application) {
 
     companion object{
         val TAG = this::class.java.simpleName
     }
-    val apiKey = utils.apiKey
+
+    private val context = getApplication<Application>().applicationContext
+
+//  TODO Benerin ini Github APIKEY NYA (Saran Reviewer)
+//    var GITHUB_API: String = BuildConfig.TheGithubApi
+
+    private val apiKey = utils.apiKey
 
     val listFollower = MutableLiveData<ArrayList<UserModel>>()
-    val listItemsFollower = ArrayList<UserModel>()
+    private val listItemsFollower = ArrayList<UserModel>()
+    val searchStateLive = MutableLiveData<Boolean>()
 
     fun setFollower(userName: String){
         listItemsFollower.clear()
-        Log.d(TAG, "DATA FOLLOWER1 : $userName , $listItemsFollower")
 
         val client = AsyncHttpClient()
         client.addHeader("Authorization", "token $apiKey")
@@ -35,27 +45,36 @@ class FollowerViewModel : ViewModel() {
             override fun onSuccess(
                 statusCode: Int,
                 headers: Array<out Header>?,
-                responseBody: ByteArray) {
+                responseBody: ByteArray
+            ) {
                 val result = String(responseBody)
-                try {
-                    val jsonArray = JSONArray(result)
-                    Log.d(TAG, "DATA FOLLOWER2 : ${jsonArray}")
-                    for (i in 0 until jsonArray.length()) {
-                        val jsonObject = jsonArray.getJSONObject(i)
-                        val login: String = jsonObject.getString("login")
-                        getDataUserDetail(login)
+                if (result == "[]"){
+                    Toast.makeText(context, UserSearchViewModel.notFoundText, Toast.LENGTH_SHORT).show()
+                    searchStateLive.postValue(false)
+                } else {
+                    try {
+                        val jsonArray = JSONArray(result)
+                        Log.d(TAG, "DATA FOLLOWER2 : ${jsonArray}")
+                        for (i in 0 until jsonArray.length()) {
+                            val jsonObject = jsonArray.getJSONObject(i)
+                            val login: String = jsonObject.getString("login")
+                            getDataUserDetail(login)
+                        }
+                        searchStateLive.postValue(true)
+                    } catch (e: Exception) {
+                        Log.e("Exception", e.message.toString())
+                        e.printStackTrace()
                     }
-
-                } catch (e: Exception) {
-                    Log.e("Exception", e.message.toString())
-                    e.printStackTrace()
                 }
+
             }
+
             override fun onFailure(
                 statusCode: Int,
                 headers: Array<out Header>?,
                 responseBody: ByteArray?,
-                error: Throwable?) {
+                error: Throwable?
+            ) {
                 Log.e("onFailure 1", error?.message.toString())
             }
         })
@@ -117,5 +136,8 @@ class FollowerViewModel : ViewModel() {
     }
     fun getFollower(): LiveData<ArrayList<UserModel>> {
         return listFollower
+    }
+    fun getStateSearch(): LiveData<Boolean> {
+        return searchStateLive
     }
 }

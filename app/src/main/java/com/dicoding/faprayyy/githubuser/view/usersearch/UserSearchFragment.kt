@@ -3,6 +3,7 @@ package com.dicoding.faprayyy.githubuser.view.usersearch
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
@@ -17,13 +18,12 @@ import com.dicoding.faprayyy.githubuser.datamodel.UserModel
 
 class UserSearchFragment : Fragment() {
 
-    companion object {
+    companion object{
         var stateTvSearchMsg = true
-        var stateUserNotFound = false
     }
 
     private var _binding: UserSearchFragmentBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding as UserSearchFragmentBinding
     private lateinit var adapter: UserAdapter
     private lateinit var viewModel: UserSearchViewModel
     val emptyList = ArrayList<UserModel>()
@@ -36,8 +36,8 @@ class UserSearchFragment : Fragment() {
         val view = binding.root
 
         setUpToolbar()
+        Log.d("CEK SEARCH", "state adapter $stateTvSearchMsg")
         showTvSearchFirst(stateTvSearchMsg)
-
         return view
     }
 
@@ -45,6 +45,7 @@ class UserSearchFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        UserSearchViewModel.notFoundText = resources.getString(R.string.user_not_found)
         viewModel = ViewModelProvider(this).get(UserSearchViewModel::class.java)
         adapter = UserAdapter()
         adapter.notifyDataSetChanged()
@@ -61,7 +62,6 @@ class UserSearchFragment : Fragment() {
 
         viewModel.getStateSearch().observe(viewLifecycleOwner){ state ->
             if (!state){
-                stateUserNotFound = true
                 showLoading(false)
                 showTvSearchFirst(true)
             }
@@ -87,12 +87,8 @@ class UserSearchFragment : Fragment() {
     }
 
     private fun showTvSearchFirst(state: Boolean){
-        val userNotFoundMsg = resources.getString(R.string.user_not_found)
-        val searchFirstMsg = resources.getString(R.string.please_search_first)
         val tv = binding.tvSearchFirst
         if (state) tv.visibility = View.VISIBLE else tv.visibility = View.GONE
-        if (stateUserNotFound) tv.text = userNotFoundMsg  else tv.text = searchFirstMsg
-
     }
 
     private fun searchData() {
@@ -112,8 +108,7 @@ class UserSearchFragment : Fragment() {
                 if (newText.isEmpty()) {
                     adapter.setData(emptyList)
                     showLoading(false)
-                    stateUserNotFound = false
-                    showTvSearchFirst(stateTvSearchMsg)
+                    showTvSearchFirst(true)
                 }
                 return true
             }

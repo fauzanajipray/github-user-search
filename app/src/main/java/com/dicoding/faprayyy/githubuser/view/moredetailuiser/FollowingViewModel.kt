@@ -1,27 +1,36 @@
 package com.dicoding.faprayyy.githubuser.view.moredetailuiser
 
+import android.annotation.SuppressLint
+import android.app.Application
 import android.util.Log
+import android.widget.Toast
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dicoding.faprayyy.githubuser.datamodel.UserModel
 import com.dicoding.faprayyy.githubuser.utils.utils
+import com.dicoding.faprayyy.githubuser.view.usersearch.UserSearchViewModel
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import cz.msebera.android.httpclient.Header
 import org.json.JSONArray
 import org.json.JSONObject
 
-class FollowingViewModel: ViewModel() {
+class FollowingViewModel(application: Application) : AndroidViewModel(application) {
 
     companion object{
         val TAG = this::class.java.simpleName
     }
 
+    @SuppressLint("StaticFieldLeak")
+    private val context = getApplication<Application>().applicationContext
+
     val apiKey = utils.apiKey
 
     val listFollowing = MutableLiveData<ArrayList<UserModel>>()
     val listItemsFollowing = ArrayList<UserModel>()
+    val searchStateLive = MutableLiveData<Boolean>()
 
     fun setFollowing(userName: String){
         listItemsFollowing.clear()
@@ -38,18 +47,23 @@ class FollowingViewModel: ViewModel() {
                 headers: Array<out Header>?,
                 responseBody: ByteArray) {
                 val result = String(responseBody)
-                try {
-                    val jsonArray = JSONArray(result)
-                    Log.d(TAG, "DATA FOLLOWING2 : $jsonArray")
-                    for (i in 0 until jsonArray.length()) {
-                        val jsonObject = jsonArray.getJSONObject(i)
-                        val login: String = jsonObject.getString("login")
-                        getDataUserDetail(login)
+                if (result == "[]"){
+                    Toast.makeText(context, UserSearchViewModel.notFoundText, Toast.LENGTH_SHORT).show()
+                    searchStateLive.postValue(false)
+                } else {
+                    try {
+                        val jsonArray = JSONArray(result)
+                        Log.d(TAG, "DATA FOLLOWING2 : $jsonArray")
+                        for (i in 0 until jsonArray.length()) {
+                            val jsonObject = jsonArray.getJSONObject(i)
+                            val login: String = jsonObject.getString("login")
+                            getDataUserDetail(login)
+                            searchStateLive.postValue(true)
+                        }
+                    } catch (e: Exception) {
+                        Log.e("Exception", e.message.toString())
+                        e.printStackTrace()
                     }
-
-                } catch (e: Exception) {
-                    Log.e("Exception", e.message.toString())
-                    e.printStackTrace()
                 }
             }
             override fun onFailure(
@@ -118,5 +132,8 @@ class FollowingViewModel: ViewModel() {
 
     fun getFollowing(): LiveData<ArrayList<UserModel>> {
         return listFollowing
+    }
+    fun getStateSearch(): LiveData<Boolean> {
+        return searchStateLive
     }
 }

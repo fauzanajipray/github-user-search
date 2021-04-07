@@ -25,7 +25,7 @@ class FollowerFollowingFragment : Fragment() {
     }
 
     private var _binding: FollowerFollowingFragmentBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding as FollowerFollowingFragmentBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,12 +38,7 @@ class FollowerFollowingFragment : Fragment() {
     }
 
     private fun setupToolbar() {
-
-        binding.toolbarId.setNavigationOnClickListener(object : View.OnClickListener{
-            override fun onClick(v: View?) {
-                getActivity()?.onBackPressed();
-            }
-        })
+        binding.toolbarId.setNavigationOnClickListener { activity?.onBackPressed() }
     }
 
     private fun setupTabLayout() {

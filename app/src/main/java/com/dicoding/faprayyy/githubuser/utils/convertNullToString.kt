@@ -1,6 +1,6 @@
 package com.dicoding.faprayyy.githubuser.utils
 
-fun ConvertNullToString(string: String): String{
+fun convertNullToString(string: String): String{
     if (string == "null"){
         return "-"
     }
