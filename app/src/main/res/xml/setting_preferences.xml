@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:iconSpaceReserved="false">
+
+    <Preference
+        android:key="@string/key_language"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="@string/change_language"
+        android:title="@string/language"
+        app:iconSpaceReserved="false" />
+
+    <SwitchPreferenceCompat
+        app:key="@string/key_notification"
+        app:title="@string/notification"
+        android:summary="@string/add_notification_summary"
+        app:iconSpaceReserved="false"/>
+
+    <Preference
+        android:key="@string/key_about_me"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/about_me"
+        app:iconSpaceReserved="false" />
+
+</PreferenceScreen>

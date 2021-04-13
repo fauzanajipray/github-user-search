@@ -1,13 +1,12 @@
 package com.dicoding.faprayyy.githubuser.view.usersearch
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.dicoding.faprayyy.githubuser.R
 import com.dicoding.faprayyy.githubuser.datamodel.UserModel
 import com.dicoding.faprayyy.githubuser.utils.utils
 import com.loopj.android.http.AsyncHttpClient
@@ -18,10 +17,13 @@ import org.json.JSONObject
 class UserSearchViewModel(application: Application) : AndroidViewModel(application) {
 
     val apiKey = utils.apiKey
+    // TODO : SET API KEY AT SECREET PROPERTIES
+    // val apiKey2 = BuildConfig.GITHUB_TOKEN
 
     val listUsers = MutableLiveData<ArrayList<UserModel>>()
     val listItems = ArrayList<UserModel>()
     val searchStateLive = MutableLiveData<Boolean>()
+    @SuppressLint("StaticFieldLeak")
     private val context = getApplication<Application>().applicationContext
 
     companion object{
@@ -34,7 +36,6 @@ class UserSearchViewModel(application: Application) : AndroidViewModel(applicati
         val client = AsyncHttpClient()
         client.addHeader("Authorization", "token $apiKey")
         client.addHeader("User-Agent", "request")
-
         val url = "https://api.github.com/search/users?q=$query"
         client.get(url, object : AsyncHttpResponseHandler() {
             override fun onSuccess(

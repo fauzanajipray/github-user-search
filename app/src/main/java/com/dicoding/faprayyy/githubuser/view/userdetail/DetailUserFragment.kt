@@ -1,9 +1,10 @@
 package com.dicoding.faprayyy.githubuser.view.userdetail
 
-import android.annotation.SuppressLint
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -12,6 +13,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.dicoding.faprayyy.githubuser.R
 import com.dicoding.faprayyy.githubuser.databinding.DetailUserFragmentBinding
 import com.dicoding.faprayyy.githubuser.utils.convertNullToString
+import com.dicoding.faprayyy.githubuser.view.alarm.AlarmReceiver
 import com.dicoding.faprayyy.githubuser.view.usersearch.UserSearchFragment
 
 class DetailUserFragment : Fragment() {
@@ -22,10 +24,10 @@ class DetailUserFragment : Fragment() {
 
     private var _binding: DetailUserFragmentBinding? = null
     private val binding get() = _binding as DetailUserFragmentBinding
+    private lateinit var alarmReceiver: AlarmReceiver
 
     private val args by navArgs<DetailUserFragmentArgs>()
 
-    @SuppressLint("StringFormatMatches")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,7 +51,6 @@ class DetailUserFragment : Fragment() {
             val text = getString(R.string.followerfollowing, follower, following)
             Log.d(TAG,"$follower, $following, $text")
 
-
             tvFollowersFollowing.text = text
         }
 
@@ -65,8 +66,9 @@ class DetailUserFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val username = args.dataUser.username as String
+        var stateFavorite = false
 
-        binding.toolbarId.setNavigationOnClickListener { activity?.onBackPressed(); }
+        binding.toolbarId.setNavigationOnClickListener { activity?.onBackPressed() }
 
         binding.apply {
             btnFollowers.setOnClickListener{
@@ -79,6 +81,22 @@ class DetailUserFragment : Fragment() {
                 actionTo.position = 1
                 findNavController().navigate(actionTo)
             }
+        }
+
+        val imgNotFavorite : Drawable? =  ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_favorite_border_24, null)
+        val imgFavorite : Drawable? =  ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_favorite_24, null)
+        val fab = binding.fabAdd
+
+        // TODO Tambahkan fungsi save ke database
+        fab.setOnClickListener{
+            if(stateFavorite){
+                Log.d(TAG, "Remove from favorite!")
+                fab.setImageDrawable(imgNotFavorite)
+            } else {
+                Log.d(TAG, "Add to favorite!")
+                fab.setImageDrawable(imgFavorite)
+            }
+            stateFavorite = !stateFavorite
         }
     }
 

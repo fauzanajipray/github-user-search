@@ -7,18 +7,24 @@
     android:orientation="vertical"
     tools:context=".view.moredetailuiser.FollowerFollowingFragment">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbarId"
+    <com.google.android.material.appbar.AppBarLayout
+        android:fitsSystemWindows="false"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:elevation="2dp"
-        android:background="@color/white"
-        app:navigationIcon="@drawable/ic_baseline_chevron_left_24"/>
+        android:layout_height="wrap_content">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarId"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white"
+            app:navigationIcon="@drawable/ic_baseline_chevron_left_24">
+        </androidx.appcompat.widget.Toolbar>
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"

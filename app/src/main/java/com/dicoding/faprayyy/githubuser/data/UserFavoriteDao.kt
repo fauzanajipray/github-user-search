@@ -1,0 +1,25 @@
+package com.dicoding.faprayyy.githubuser.data
+
+import android.database.Cursor
+import androidx.room.*
+
+@Dao
+interface UserFavoriteDao {
+    @Query("SELECT * FROM user_favorite_table")
+    suspend fun fetchAllUsers() : List<UserFavorite>
+
+    @Query("SELECT * FROM user_favorite_table WHERE username = :userName")
+    suspend      fun getFavByUsername(userName: String) : List<UserFavorite>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addUserToFavoriteDB(user: UserFavorite)
+
+    @Delete
+    suspend fun deleteUserFromFavoriteDB(user: UserFavorite)
+
+    /**
+     * Cursor for content provider
+     */
+    @Query("SELECT * FROM user_favorite_table")
+    fun cursorGetAllUserFavorite() : Cursor
+}

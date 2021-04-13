@@ -2,19 +2,21 @@ package com.dicoding.faprayyy.githubuser.view.usersearch
 
 import android.content.Intent
 import android.os.Bundle
-import android.provider.Settings
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.faprayyy.githubuser.R
 import com.dicoding.faprayyy.githubuser.adapter.UserAdapter
-import com.dicoding.faprayyy.githubuser.databinding.UserSearchFragmentBinding
+import com.dicoding.faprayyy.githubuser.databinding.FragmentUserSearchBinding
 import com.dicoding.faprayyy.githubuser.datamodel.UserModel
+import com.dicoding.faprayyy.githubuser.view.settings.SettingsActivity
 
 class UserSearchFragment : Fragment() {
 
@@ -22,8 +24,8 @@ class UserSearchFragment : Fragment() {
         var stateTvSearchMsg = true
     }
 
-    private var _binding: UserSearchFragmentBinding? = null
-    private val binding get() = _binding as UserSearchFragmentBinding
+    private var _binding: FragmentUserSearchBinding? = null
+    private val binding get() = _binding as FragmentUserSearchBinding
     private lateinit var adapter: UserAdapter
     private lateinit var viewModel: UserSearchViewModel
     val emptyList = ArrayList<UserModel>()
@@ -32,7 +34,7 @@ class UserSearchFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = UserSearchFragmentBinding.inflate(inflater, container, false)
+        _binding = FragmentUserSearchBinding.inflate(inflater, container, false)
         val view = binding.root
 
         setUpToolbar()
@@ -122,14 +124,11 @@ class UserSearchFragment : Fragment() {
             setOnMenuItemClickListener(object : Toolbar.OnMenuItemClickListener{
                 override fun onMenuItemClick(item: MenuItem?): Boolean {
                     when(item?.itemId){
-                        R.id.menu_item_about -> {
-                            findNavController().navigate(UserSearchFragmentDirections.actionUserSearchFragmentToAboutMeFragment())
-                        }
-                        R.id.menu_item_languange -> {
-                            val mIntent = Intent(Settings.ACTION_LOCALE_SETTINGS)
+                        R.id.menu_item_favorite -> findNavController().navigate(UserSearchFragmentDirections.actionUserSearchFragmentToFavoriteUserFragment())
+                        R.id.menu_item_settings -> {
+                            val mIntent = Intent(activity, SettingsActivity::class.java)
                             startActivity(mIntent)
                         }
-
                     }
                     return true
                 }

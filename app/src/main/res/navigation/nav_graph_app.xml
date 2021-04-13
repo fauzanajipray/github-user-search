@@ -8,13 +8,13 @@
         android:id="@+id/userSearchFragment"
         android:name="com.dicoding.faprayyy.githubuser.view.usersearch.UserSearchFragment"
         android:label="user_search_fragment"
-        tools:layout="@layout/user_search_fragment" >
+        tools:layout="@layout/fragment_user_search" >
         <action
             android:id="@+id/action_userSearchFragment_to_detailUserFragment"
             app:destination="@id/detailUserFragment" />
         <action
-            android:id="@+id/action_userSearchFragment_to_aboutMeFragment"
-            app:destination="@id/aboutMeFragment"/>
+            android:id="@+id/action_userSearchFragment_to_favoriteUserFragment"
+            app:destination="@id/favoriteUserFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailUserFragment"
@@ -45,8 +45,9 @@
             android:defaultValue="0" />
     </fragment>
     <fragment
-        android:id="@+id/aboutMeFragment"
-        android:name="com.dicoding.faprayyy.githubuser.view.AboutMeFragment"
-        android:label="AboutMeFragment" />
+        android:id="@+id/favoriteUserFragment"
+        android:name="com.dicoding.faprayyy.githubuser.view.favorituser.FavoriteUserFragment"
+        android:label="favorite_user_fragment"
+        tools:layout="@layout/favorite_user_fragment" />
 
 </navigation>

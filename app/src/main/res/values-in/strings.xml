@@ -17,5 +17,10 @@
     <string name="search_user">Cari pengguna…</string>
 
     <string name="followerfollowing">%1$s pengikut ▪️ %2$s mengikuti</string>
-    <string name="change_languange">Ganti bahasa</string>
+    <string name="change_language">Ganti bahasa</string>
+    <string name="add_favorite_user">Tambahkan ke favorit</string>
+    <string name="favorite_user">Favorit Pengguna</string>
+    <string name="language">Bahasa</string>
+    <string name="notification">Notifikasi</string>
+    <string name="add_notification_summary">Berikan notifikasi setiap hari</string>
 </resources>
