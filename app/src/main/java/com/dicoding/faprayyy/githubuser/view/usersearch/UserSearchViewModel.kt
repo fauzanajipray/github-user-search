@@ -129,7 +129,6 @@ class UserSearchViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     fun getUsers(): LiveData<ArrayList<UserModel>> {
-        Log.d("CEK", "GET USER + $listItems")
         UserSearchFragment.stateTvSearchMsg = listItems.toString() == "[]"
         return listUsers
     }

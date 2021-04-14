@@ -2,26 +2,24 @@ package com.dicoding.faprayyy.githubuser.data
 
 import android.os.Parcelable
 import androidx.annotation.NonNull
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
 
 @Parcelize
-@Entity(tableName = "user_favorite_table")
+@Entity(tableName = "favorite")
 data class UserFavorite(
     @PrimaryKey
     @NonNull
-    @ColumnInfo(name = "username") val usename: String,
-    @ColumnInfo(name = "name") val name: String?,
-    @ColumnInfo(name = "avatar_url") val avatarUrl: String?,
-    @ColumnInfo(name = "following_url") val followingUrl: String?,
-    @ColumnInfo(name = "bio") val bio: String?,
-    @ColumnInfo(name = "company") val company: String?,
-    @ColumnInfo(name = "public_repos") val publicRepos: Int?,
-    @ColumnInfo(name = "followers_url") val followersUrl: String?,
-    @ColumnInfo(name = "followers") val followers: Int?,
-    @ColumnInfo(name = "following") val following: Int?,
-    @ColumnInfo(name = "location") val location: String?
+    var username: String,
+    var name: String?,
+    var avatar: String?,
+    var bio: String?,
+    var company: String?,
+    var location: String?,
+    var repository: Int,
+    var follower: Int,
+    var following: Int
 ) : Parcelable
+

@@ -3,6 +3,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <permission android:name="com.dicoding.faprayyy.githubuser.READ_DATABASE" android:protectionLevel="normal"/>
+    <permission android:name="com.dicoding.faprayyy.githubuser.WRITE_DATABASE" android:protectionLevel="normal"/>
+
 
     <application
         android:allowBackup="true"
@@ -32,5 +35,13 @@
             android:name=".view.alarm.AlarmReceiver"
             android:exported="true"
             android:enabled="true" />
+
+        <provider
+            android:name="com.dicoding.faprayyy.githubuser.provider.MyContentProvider"
+            android:authorities="com.dicoding.faprayyy.githubuser"
+            android:exported="true"
+            android:enabled="true"
+            android:readPermission="com.dicoding.faprayyy.githubuser.READ_DATABASE"
+            android:writePermission="com.dicoding.faprayyy.githubuser.WRITE_DATABASE" />
     </application>
 </manifest>

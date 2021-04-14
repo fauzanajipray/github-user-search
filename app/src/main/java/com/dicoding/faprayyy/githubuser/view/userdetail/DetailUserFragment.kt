@@ -1,33 +1,53 @@
 package com.dicoding.faprayyy.githubuser.view.userdetail
 
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.dicoding.faprayyy.githubuser.R
+import com.dicoding.faprayyy.githubuser.data.UserFavorite
+import com.dicoding.faprayyy.githubuser.data.UserFavoriteDatabase
+import com.dicoding.faprayyy.githubuser.data.UserFavoriteRepository
 import com.dicoding.faprayyy.githubuser.databinding.DetailUserFragmentBinding
+import com.dicoding.faprayyy.githubuser.datamodel.UserModel
 import com.dicoding.faprayyy.githubuser.utils.convertNullToString
-import com.dicoding.faprayyy.githubuser.view.alarm.AlarmReceiver
-import com.dicoding.faprayyy.githubuser.view.usersearch.UserSearchFragment
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class DetailUserFragment : Fragment() {
 
     companion object {
-        val TAG = UserSearchFragment::class.java.simpleName
+        val TAG = this::class.java.simpleName
     }
 
     private var _binding: DetailUserFragmentBinding? = null
     private val binding get() = _binding as DetailUserFragmentBinding
-    private lateinit var alarmReceiver: AlarmReceiver
-
+    private lateinit var user : UserModel
     private val args by navArgs<DetailUserFragmentArgs>()
+    private lateinit var database: UserFavoriteDatabase
+    private lateinit var imgNotFavorite : Drawable
+    private lateinit var imgFavorite : Drawable
+    private var stateFavorite = false
+    private var userFromDB : LiveData<UserFavorite>? = null
+    private lateinit var mUserFavRepo : UserFavoriteRepository
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        database = UserFavoriteDatabase.getDatabase(context as Context)
+        mUserFavRepo = UserFavoriteRepository(database.userFavDao())
+        Log.d(TAG, "DB: $database")
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,30 +55,33 @@ class DetailUserFragment : Fragment() {
         _binding = DetailUserFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        binding.apply {
-            tvName.text = args.dataUser.name?.let { convertNullToString(it) }
-            tvUserName.text = args.dataUser.username?.let { convertNullToString(it) }
-            tvBio.text = args.dataUser.bio?.let { convertNullToString(it) }
-            tvCompany.text = args.dataUser.company?.let { convertNullToString(it) }
-            tvLocation.text = args.dataUser.location?.let { convertNullToString(it) }
-            tvRepoCount.text = args.dataUser.repository.toString()
-            tvFollowersCount.text = args.dataUser.follower.toString()
-            tvFollowingCount.text = args.dataUser.following.toString()
-            titleActionBar.text = args.dataUser.name?.let{ convertNullToString(it)}
-
-            val follower : String = convertIntValue(args.dataUser.follower)
-            val following : String = convertIntValue(args.dataUser.following)
-            val text = getString(R.string.followerfollowing, follower, following)
-            Log.d(TAG,"$follower, $following, $text")
-
-            tvFollowersFollowing.text = text
+        imgNotFavorite =  ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_favorite_border_24, null) as Drawable
+        imgFavorite =  ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_favorite_24, null) as Drawable
+        user = args.dataUser
+        getUserFavFromDB(user.username as String)
+        user
+        user.let {
+            binding.apply {
+                tvName.text = it.name?.let { convertNullToString(it) }
+                tvUserName.text = it.username?.let { convertNullToString(it) }
+                tvBio.text = it.bio?.let { convertNullToString(it) }
+                tvCompany.text = it.company?.let { convertNullToString(it) }
+                tvLocation.text = it.location?.let { convertNullToString(it) }
+                tvRepoCount.text = it.repository.toString()
+                tvFollowersCount.text = it.follower.toString()
+                tvFollowingCount.text = it.following.toString()
+                titleActionBar.text = it.name?.let{ convertNullToString(it)}
+                val follower : String = convertIntValue(it.follower)
+                val following : String = convertIntValue(it.following)
+                val text = getString(R.string.followerfollowing, follower, following)
+                tvFollowersFollowing.text = text
+            }
+            Glide.with(view)
+                .load(it.avatar)
+                .apply(RequestOptions().override(55,55))
+                .into(binding.ivUserPic)
         }
-
-        Glide.with(view)
-            .load(args.dataUser.avatar)
-            .apply(RequestOptions().override(55,55))
-            .into(binding.ivUserPic)
-
+        changeImgFAB(stateFavorite)
         return view
     }
 
@@ -66,7 +89,6 @@ class DetailUserFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val username = args.dataUser.username as String
-        var stateFavorite = false
 
         binding.toolbarId.setNavigationOnClickListener { activity?.onBackPressed() }
 
@@ -83,21 +105,72 @@ class DetailUserFragment : Fragment() {
             }
         }
 
-        val imgNotFavorite : Drawable? =  ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_favorite_border_24, null)
-        val imgFavorite : Drawable? =  ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_favorite_24, null)
         val fab = binding.fabAdd
 
         // TODO Tambahkan fungsi save ke database
         fab.setOnClickListener{
             if(stateFavorite){
                 Log.d(TAG, "Remove from favorite!")
+                deleteUserFavFromDB(user.username as String)
                 fab.setImageDrawable(imgNotFavorite)
             } else {
                 Log.d(TAG, "Add to favorite!")
+                addUserFavtoDB(user)
                 fab.setImageDrawable(imgFavorite)
             }
             stateFavorite = !stateFavorite
         }
+    }
+
+    private fun getUserFavFromDB(userName: String) {
+
+        Log.d(TAG,"--- FETCH DATA MULAI ---")
+//        GlobalScope.launch(Dispatchers.Main) {
+////            database.userFavRepo().getUserFavorite(userName)
+//            database.userFavDao().getUserByID(userName)
+//        }
+//        mUserFavRepo.getUserFavByID().observe(viewLifecycleOwner) {
+//            if (it != null) {
+//                Log.d(TAG, "CEK USER : $userFromDB")
+//            } else {
+//                Log.d(TAG, "CEK USER TIDAK ADA : $userFromDB")
+//            }
+//        }
+        Log.d(TAG,"--- FETCH DATA SELESAI ---")
+
+    }
+
+    private fun addUserFavtoDB(user : UserModel) {
+        val userFavorite = user.let {
+            UserFavorite(
+                it.username.toString(),
+                it.name,
+                it.avatar,
+                it.bio,
+                it.company,
+                it.location,
+                it.repository,
+                it.follower,
+                it.following
+                )
+            }
+        GlobalScope.launch(Dispatchers.IO) {
+            val stateSucces =  database.userFavDao().addUserFavorite(userFavorite)
+            Log.d(TAG, "User saved! : $stateSucces")
+            changeImgFAB(true)
+        }
+    }
+
+    private fun changeImgFAB(state : Boolean) {
+        if (state) {
+            binding.fabAdd.setImageDrawable(imgFavorite)
+        } else {
+            binding.fabAdd.setImageDrawable(imgNotFavorite)
+        }
+    }
+
+    private fun deleteUserFavFromDB(s: String) {
+        // TODO("Not yet implemented")
     }
 
     override fun onDestroy() {
