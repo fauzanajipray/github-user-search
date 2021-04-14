@@ -3,11 +3,11 @@ package com.dicoding.faprayyy.githubuser.view.userdetail
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -19,9 +19,7 @@ import com.dicoding.faprayyy.githubuser.data.UserFavoriteRepository
 import com.dicoding.faprayyy.githubuser.databinding.DetailUserFragmentBinding
 import com.dicoding.faprayyy.githubuser.datamodel.UserModel
 import com.dicoding.faprayyy.githubuser.utils.convertNullToString
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.dicoding.faprayyy.githubuser.view.favorituser.UserFavoriteViewModel
 
 class DetailUserFragment : Fragment() {
 
@@ -36,17 +34,15 @@ class DetailUserFragment : Fragment() {
     private lateinit var database: UserFavoriteDatabase
     private lateinit var imgNotFavorite : Drawable
     private lateinit var imgFavorite : Drawable
-    private var stateFavorite = false
-    private var userFromDB : LiveData<UserFavorite>? = null
+    private var stateFavorite : Boolean = true
     private lateinit var mUserFavRepo : UserFavoriteRepository
-
+    private lateinit var mUserFavoriteViewModel: UserFavoriteViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         database = UserFavoriteDatabase.getDatabase(context as Context)
         mUserFavRepo = UserFavoriteRepository(database.userFavDao())
-        Log.d(TAG, "DB: $database")
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,9 +53,11 @@ class DetailUserFragment : Fragment() {
 
         imgNotFavorite =  ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_favorite_border_24, null) as Drawable
         imgFavorite =  ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_favorite_24, null) as Drawable
+        mUserFavoriteViewModel = ViewModelProvider(this).get(UserFavoriteViewModel::class.java)
+
+        stateFavorite = false
         user = args.dataUser
         getUserFavFromDB(user.username as String)
-        user
         user.let {
             binding.apply {
                 tvName.text = it.name?.let { convertNullToString(it) }
@@ -104,61 +102,41 @@ class DetailUserFragment : Fragment() {
                 findNavController().navigate(actionTo)
             }
         }
-
         val fab = binding.fabAdd
+        val userFavorite = user.let {
+            UserFavorite(it.username.toString(), it.name, it.avatar, it.bio, it.company,
+                    it.location, it.repository, it.follower, it.following)
+        }
 
-        // TODO Tambahkan fungsi save ke database
         fab.setOnClickListener{
             if(stateFavorite){
-                Log.d(TAG, "Remove from favorite!")
-                deleteUserFavFromDB(user.username as String)
-                fab.setImageDrawable(imgNotFavorite)
+                deleteUserFavFromDB(userFavorite)
             } else {
-                Log.d(TAG, "Add to favorite!")
-                addUserFavtoDB(user)
-                fab.setImageDrawable(imgFavorite)
+                addUserFavtoDB(userFavorite)
             }
-            stateFavorite = !stateFavorite
         }
     }
 
     private fun getUserFavFromDB(userName: String) {
 
-        Log.d(TAG,"--- FETCH DATA MULAI ---")
-//        GlobalScope.launch(Dispatchers.Main) {
-////            database.userFavRepo().getUserFavorite(userName)
-//            database.userFavDao().getUserByID(userName)
-//        }
-//        mUserFavRepo.getUserFavByID().observe(viewLifecycleOwner) {
-//            if (it != null) {
-//                Log.d(TAG, "CEK USER : $userFromDB")
-//            } else {
-//                Log.d(TAG, "CEK USER TIDAK ADA : $userFromDB")
-//            }
-//        }
-        Log.d(TAG,"--- FETCH DATA SELESAI ---")
-
+        mUserFavoriteViewModel.readUserById(userName)
+        mUserFavoriteViewModel.getUserById().observe(viewLifecycleOwner) {
+            stateFavorite = false
+            if (it != null) {
+                stateFavorite = true
+                changeImgFAB(stateFavorite)
+            } else {
+                stateFavorite = false
+                changeImgFAB(stateFavorite)
+            }
+        }
     }
 
-    private fun addUserFavtoDB(user : UserModel) {
-        val userFavorite = user.let {
-            UserFavorite(
-                it.username.toString(),
-                it.name,
-                it.avatar,
-                it.bio,
-                it.company,
-                it.location,
-                it.repository,
-                it.follower,
-                it.following
-                )
-            }
-        GlobalScope.launch(Dispatchers.IO) {
-            val stateSucces =  database.userFavDao().addUserFavorite(userFavorite)
-            Log.d(TAG, "User saved! : $stateSucces")
-            changeImgFAB(true)
-        }
+    private fun addUserFavtoDB(user : UserFavorite) {
+        mUserFavoriteViewModel.addUser(user)
+        stateFavorite = true
+        changeImgFAB(stateFavorite)
+        Toast.makeText(context, "${user.username} add to favorite!", Toast.LENGTH_SHORT).show()
     }
 
     private fun changeImgFAB(state : Boolean) {
@@ -169,8 +147,10 @@ class DetailUserFragment : Fragment() {
         }
     }
 
-    private fun deleteUserFavFromDB(s: String) {
-        // TODO("Not yet implemented")
+    private fun deleteUserFavFromDB(user: UserFavorite) {
+        mUserFavoriteViewModel.deleteUser(user)
+        Toast.makeText(context, "${user.username} remove from favorite!", Toast.LENGTH_SHORT).show()
+        changeImgFAB(stateFavorite)
     }
 
     override fun onDestroy() {

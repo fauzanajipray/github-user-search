@@ -7,13 +7,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.dicoding.faprayyy.githubuser.adapter.UserAdapter
 import com.dicoding.faprayyy.githubuser.adapter.UserFavoriteAdapter
 import com.dicoding.faprayyy.githubuser.databinding.FragmentFavoriteUserBinding
 
-class FavoriteUserFragment : Fragment() {
+class UserFavoriteFragment : Fragment() {
 
-    private lateinit var viewModel: FavoriteUserViewModel
+    private lateinit var viewModel: UserFavoriteViewModel
     private var _binding: FragmentFavoriteUserBinding? = null
     private val binding get() = _binding as FragmentFavoriteUserBinding
     private lateinit var adapter: UserFavoriteAdapter
@@ -36,7 +35,7 @@ class FavoriteUserFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(FavoriteUserViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(UserFavoriteViewModel::class.java)
 
         adapter = UserFavoriteAdapter()
         adapter.notifyDataSetChanged()

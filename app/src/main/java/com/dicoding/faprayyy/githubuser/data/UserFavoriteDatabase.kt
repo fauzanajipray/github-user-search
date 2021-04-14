@@ -10,7 +10,6 @@ import androidx.room.RoomDatabase
 abstract class UserFavoriteDatabase : RoomDatabase() {
 
     abstract fun userFavDao(): UserFavoriteDao
-//    abstract fun userFavRepo(): UserFavoriteRepository
 
     companion object{
         @Volatile

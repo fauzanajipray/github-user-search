@@ -46,7 +46,7 @@
     </fragment>
     <fragment
         android:id="@+id/favoriteUserFragment"
-        android:name="com.dicoding.faprayyy.githubuser.view.favorituser.FavoriteUserFragment"
+        android:name="com.dicoding.faprayyy.githubuser.view.favorituser.UserFavoriteFragment"
         android:label="favorite_user_fragment"
         tools:layout="@layout/fragment_favorite_user" />
 

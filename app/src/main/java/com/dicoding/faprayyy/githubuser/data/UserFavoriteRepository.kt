@@ -3,22 +3,33 @@ package com.dicoding.faprayyy.githubuser.data
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
-class UserFavoriteRepository(private val userFavoriteDao: UserFavoriteDao) {
+class UserFavoriteRepository(private val userDao: UserFavoriteDao) {
 
-    val readAllData : LiveData<List<UserFavorite>> = userFavoriteDao.readAllData()
-    val readData = MutableLiveData<UserFavorite>()
+    val readAllData: LiveData<List<UserFavorite>> = userDao.readAllData()
 
-//    //            = userFavoriteDao.getUserByID()
-    suspend fun addUserFavorite(user: UserFavorite){
-        userFavoriteDao.addUserFavorite(user)
+    suspend fun addUser(user: UserFavorite){
+        userDao.addUserFavorite(user)
     }
 
-//    suspend fun getUserFavorite(userName : String){
-//        readData.postValue(userFavoriteDao.getUserByID(userName))
-//    }
-//
-//    fun getUserFavByID(): LiveData<UserFavorite>{
-//        return readData
-//    }
+    suspend fun updateUser(user: UserFavorite){
+        userDao.updateUser(user)
+    }
+
+    suspend fun deleteUser(user: UserFavorite){
+        userDao.deleteUser(user)
+    }
+
+    suspend fun deleteAllUsers(){
+        userDao.deleteAllUsers()
+    }
+
+    suspend fun readUserById(userName : String) : UserFavorite{
+        return userDao.readUserById(userName)
+    }
+
+    suspend fun deleteUserById(userName : String){
+        userDao.readUserById(userName)
+    }
+
 
 }
