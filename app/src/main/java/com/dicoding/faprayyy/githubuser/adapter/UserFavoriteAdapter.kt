@@ -1,5 +1,7 @@
 package com.dicoding.faprayyy.githubuser.adapter
 
+import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,13 +11,16 @@ import com.bumptech.glide.request.RequestOptions
 import com.dicoding.faprayyy.githubuser.R
 import com.dicoding.faprayyy.githubuser.data.UserFavorite
 import com.dicoding.faprayyy.githubuser.databinding.ItemUserBinding
+import com.dicoding.faprayyy.githubuser.datamodel.UserModel
 import com.dicoding.faprayyy.githubuser.utils.convertNullToString
 
 class UserFavoriteAdapter : RecyclerView.Adapter<UserFavoriteAdapter.UserHolder>() {
 
+    private lateinit var onItemClickCallback: UserFavoriteAdapter.OnItemClickCallback
+
     private val mData = ArrayList<UserFavorite>()
 
-    fun setData(items: ArrayList<UserFavorite>) {
+    fun setData(items: List<UserFavorite>) {
         mData.clear()
         mData.addAll(items)
         notifyDataSetChanged()
@@ -26,6 +31,7 @@ class UserFavoriteAdapter : RecyclerView.Adapter<UserFavoriteAdapter.UserHolder>
         fun bind(user: UserFavorite) {
             binding.tvName.text = user.name?.let { convertNullToString(it) }
             binding.tvUsername.text = user.username
+
             Glide.with(itemView.context)
                     .load(user.avatar)
                     .apply(RequestOptions().override(55,55))
@@ -40,9 +46,22 @@ class UserFavoriteAdapter : RecyclerView.Adapter<UserFavoriteAdapter.UserHolder>
 
     override fun onBindViewHolder(holder: UserHolder, position: Int) {
         holder.bind(mData[position])
+
+        holder.itemView.setOnClickListener{
+            onItemClickCallback.onItemClicked(mData[holder.adapterPosition])
+        }
     }
 
     override fun getItemCount(): Int {
         return mData.size
     }
+
+    interface OnItemClickCallback {
+        fun onItemClicked(data: UserFavorite)
+    }
+
+    fun setOnItemClickCallback(onItemClickCallback: UserFavoriteAdapter.OnItemClickCallback){
+        this.onItemClickCallback = onItemClickCallback
+    }
+
 }

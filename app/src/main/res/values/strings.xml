@@ -2,7 +2,6 @@
     <string name="app_name">Github User</string>
 
     <string name="about_me">About Me</string>
-
     <string name="my_name">Fauzan Aji Prayoga</string>
     <string name="my_username">faprayyy</string>
     <string name="my_email">fauzanjr1@gmail.com</string>
@@ -30,4 +29,5 @@
     <string name="notification_enabled">Notification enabled</string>
     <string name="notification_disabled">Notification disabled</string>
     <string name="find_user_now">Let\'s find your favorite users now</string>
+    <string name="you_don_t_have_any_favorite_users">You don\'t have any favorite users</string>
 </resources>

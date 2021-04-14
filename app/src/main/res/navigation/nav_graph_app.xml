@@ -48,6 +48,10 @@
         android:id="@+id/favoriteUserFragment"
         android:name="com.dicoding.faprayyy.githubuser.view.favorituser.UserFavoriteFragment"
         android:label="favorite_user_fragment"
-        tools:layout="@layout/fragment_favorite_user" />
+        tools:layout="@layout/fragment_favorite_user" >
+        <action
+            android:id="@+id/action_favoriteUserFragment_to_detailUserFragment"
+            app:destination="@id/detailUserFragment" />
+    </fragment>
 
 </navigation>

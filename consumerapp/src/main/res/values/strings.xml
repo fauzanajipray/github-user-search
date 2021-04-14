@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Consumer Gitser</string>
+    <string name="about_me">About Me</string>
+    <string name="my_name">Fauzan Aji Prayoga</string>
+    <string name="my_username">faprayyy</string>
+    <string name="my_email">fauzanjr1@gmail.com</string>
+
+    <string name="no_data_favorite">You don\'t have any favorite users</string>
+
+</resources>

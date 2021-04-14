@@ -32,7 +32,7 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.UserHolder>() {
         holder.bind(mData[position])
 
         holder.itemView.setOnClickListener{
-            onItemClickCallback.onItemClicked(mData[holder.adapterPosition])
+            onItemClickCallback.onItemClicked(mData[holder.absoluteAdapterPosition])
         }
     }
 

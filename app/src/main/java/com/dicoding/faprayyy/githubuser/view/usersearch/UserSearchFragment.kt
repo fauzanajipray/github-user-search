@@ -38,11 +38,9 @@ class UserSearchFragment : Fragment() {
         val view = binding.root
 
         setUpToolbar()
-        Log.d("CEK SEARCH", "state adapter $stateTvSearchMsg")
         showTvSearchFirst(stateTvSearchMsg)
         return view
     }
-
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -55,12 +53,12 @@ class UserSearchFragment : Fragment() {
         binding.rvUser.adapter = adapter
         searchData()
 
-        viewModel.getUsers().observe(viewLifecycleOwner) { userItems ->
-            if (userItems != null) {
-                adapter.setData(userItems)
+        viewModel.getUsers().observe(viewLifecycleOwner, {
+            if (it != null) {
+                adapter.setData(it)
                 showLoading(false)
             }
-        }
+        })
 
         viewModel.getStateSearch().observe(viewLifecycleOwner){ state ->
             if (!state){
