@@ -29,5 +29,7 @@
     <string name="notification_enabled">Notification enabled</string>
     <string name="notification_disabled">Notification disabled</string>
     <string name="find_user_now">Let\'s find your favorite users now</string>
-    <string name="you_don_t_have_any_favorite_users">You don\'t have any favorite users</string>
+    <string name="remove_favorite">%s remove from favorite!</string>
+    <string name="add_favorite">%s add to favorite!</string>
+    <string name="you_don_t_have_any_favorite_users">You don\'t have any favorite users now</string>
 </resources>

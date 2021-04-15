@@ -13,7 +13,7 @@ import com.dicoding.faprayyy.consumerapp.databinding.ItemUserBinding
 
 class UserFavoriteAdapter : RecyclerView.Adapter<UserFavoriteAdapter.UserHolder>() {
 
-    private val mData = ArrayList<UserFavorite>()
+    var mData = ArrayList<UserFavorite>()
 
     fun setData(items: List<UserFavorite>) {
         mData.clear()

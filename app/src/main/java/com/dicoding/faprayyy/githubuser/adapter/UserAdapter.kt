@@ -15,7 +15,7 @@ import com.dicoding.faprayyy.githubuser.view.usersearch.UserSearchFragment
 class UserAdapter : RecyclerView.Adapter<UserAdapter.UserHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
-    private val mData = ArrayList<UserModel>()
+    val mData = ArrayList<UserModel>()
 
     fun setData(items: ArrayList<UserModel>) {
         mData.clear()

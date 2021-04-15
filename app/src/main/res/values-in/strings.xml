@@ -23,4 +23,11 @@
     <string name="language">Bahasa</string>
     <string name="notification">Notifikasi</string>
     <string name="add_notification_summary">Berikan notifikasi setiap hari</string>
+    <string name="settings">Pengaturan</string>
+    <string name="notification_enabled">Notifikasi dinyalakan</string>
+    <string name="notification_disabled">Notification dimatikan</string>
+    <string name="find_user_now">Ayo cari user favoritemu sekarang</string>
+    <string name="remove_favorite">%s dihapus dari favorit!</string>
+    <string name="add_favorite">%s ditambahkan dari favorit!</string>
+    <string name="you_don_t_have_any_favorite_users">Sekarang kamu tidak memiliki favorite user</string>
 </resources>

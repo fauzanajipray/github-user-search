@@ -11,14 +11,13 @@ import com.bumptech.glide.request.RequestOptions
 import com.dicoding.faprayyy.githubuser.R
 import com.dicoding.faprayyy.githubuser.data.UserFavorite
 import com.dicoding.faprayyy.githubuser.databinding.ItemUserBinding
-import com.dicoding.faprayyy.githubuser.datamodel.UserModel
 import com.dicoding.faprayyy.githubuser.utils.convertNullToString
 
 class UserFavoriteAdapter : RecyclerView.Adapter<UserFavoriteAdapter.UserHolder>() {
 
-    private lateinit var onItemClickCallback: UserFavoriteAdapter.OnItemClickCallback
+    private lateinit var onItemClickCallback: OnItemClickCallback
 
-    private val mData = ArrayList<UserFavorite>()
+    var mData = ArrayList<UserFavorite>()
 
     fun setData(items: List<UserFavorite>) {
         mData.clear()
@@ -48,7 +47,7 @@ class UserFavoriteAdapter : RecyclerView.Adapter<UserFavoriteAdapter.UserHolder>
         holder.bind(mData[position])
 
         holder.itemView.setOnClickListener{
-            onItemClickCallback.onItemClicked(mData[holder.adapterPosition])
+            onItemClickCallback.onItemClicked(mData[holder.absoluteAdapterPosition])
         }
     }
 
@@ -60,7 +59,7 @@ class UserFavoriteAdapter : RecyclerView.Adapter<UserFavoriteAdapter.UserHolder>
         fun onItemClicked(data: UserFavorite)
     }
 
-    fun setOnItemClickCallback(onItemClickCallback: UserFavoriteAdapter.OnItemClickCallback){
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback){
         this.onItemClickCallback = onItemClickCallback
     }
 

@@ -14,7 +14,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
-import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +21,7 @@ import com.dicoding.faprayyy.consumerapp.R
 import com.dicoding.faprayyy.consumerapp.data.UserFavorite
 import com.dicoding.faprayyy.consumerapp.databinding.FragmentUserFavoriteBinding
 import com.dicoding.faprayyy.consumerapp.helper.MappingHelper
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -30,12 +30,12 @@ import kotlinx.coroutines.launch
 class UserFavoriteFragment : Fragment() {
 
     companion object {
-        const val AUTHORITY = "com.dicoding.faprayyy.githubuser"
-        const val SCHEME = "content"
-        const val TABLE_NAME = "favorite"
-        const val DATA_USER = "data_user"
+        private const val AUTHORITY = "com.dicoding.faprayyy.githubuser"
+        private const val SCHEME = "content"
+        private const val TABLE_NAME = "favorite"
+        private const val EXTRA_STATE = "EXTRA_STATE"
 
-        val CONTENT_URI: Uri = Uri.Builder().scheme(SCHEME)
+        private val CONTENT_URI: Uri = Uri.Builder().scheme(SCHEME)
             .authority(AUTHORITY)
             .appendPath(TABLE_NAME)
             .build()
@@ -45,8 +45,7 @@ class UserFavoriteFragment : Fragment() {
     private val binding get() = _binding as FragmentUserFavoriteBinding
     private lateinit var adapter: UserFavoriteAdapter
     private lateinit var mContext: Context
-    private lateinit var mData: ArrayList<UserFavorite>
-    val listUsers = MutableLiveData<ArrayList<UserFavorite>>()
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
@@ -57,51 +56,66 @@ class UserFavoriteFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentUserFavoriteBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.rvUserFavorite.layoutManager = LinearLayoutManager(mContext)
-        binding.rvUserFavorite.setHasFixedSize(true)
         adapter = UserFavoriteAdapter()
+        adapter.notifyDataSetChanged()
+        binding.rvUserFavorite.layoutManager = LinearLayoutManager(activity)
         binding.rvUserFavorite.adapter = adapter
-        mData = ArrayList()
-        listUsers.observe(viewLifecycleOwner) {
-            adapter.setData(it)
-        }
-    }
-
-    inner class CallbackLoader : LoaderManager.LoaderCallbacks<Cursor>{
-        override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
-            binding.progressBar.visibility = View.VISIBLE
-            return CursorLoader(mContext, CONTENT_URI, null, null, null, null)
-        }
-
-        override fun onLoadFinished(loader: Loader<Cursor>, cursor: Cursor?) {
-            binding.progressBar.visibility = View.INVISIBLE
-            if (cursor != null){
-                mData = MappingHelper.mapCursorToArrayList(cursor)
-                listUsers.postValue(mData)
-            } else {
-                val string = resources.getString(R.string.no_data_favorite)
-                Toast.makeText(mContext, string, Toast.LENGTH_SHORT).show()
-                listUsers.postValue(mData)
+        val myObserver = object : ContentObserver(mHandler()) {
+            override fun onChange(self: Boolean) {
+                loadUsersAsync()
             }
         }
+        activity?.contentResolver?.registerContentObserver(CONTENT_URI, true, myObserver)
 
-        override fun onLoaderReset(loader: Loader<Cursor>) {
+        if (savedInstanceState == null) {
+            loadUsersAsync()
+            activity?.contentResolver?.registerContentObserver(CONTENT_URI, true, myObserver)
+
+        } else {
+            val list = savedInstanceState.getParcelableArrayList<UserFavorite>(EXTRA_STATE)
+            if (list != null) {
+                adapter.mData = list
+            }
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        LoaderManager.getInstance(this).destroyLoader(0)
+    private fun mHandler() : Handler{
+        val handlerThread = HandlerThread("DataObserver")
+        handlerThread.start()
+        return Handler(handlerThread.looper)
     }
-    override fun onResume() {
-        super.onResume()
-        LoaderManager.getInstance(this).initLoader(0, null, CallbackLoader())
+
+    private fun loadUsersAsync() {
+        GlobalScope.launch(Dispatchers.Main) {
+            binding.progressBar.visibility = View.VISIBLE
+
+            val deferredNotes = async(Dispatchers.IO) {
+                val cursor = activity?.contentResolver?.query(CONTENT_URI, null, null, null, null)
+                MappingHelper.mapCursorToArrayList(cursor)
+            }
+            binding.progressBar.visibility = View.INVISIBLE
+            val users = deferredNotes.await()
+            if (users.size > 0) {
+                adapter.setData(users)
+            } else {
+                adapter.setData(ArrayList())
+                showSnackBarMessage(resources.getString(R.string.no_data_favorite))
+            }
+        }
+    }
+
+    private fun showSnackBarMessage(message: String) {
+        Snackbar.make(binding.rvUserFavorite, message, Snackbar.LENGTH_SHORT).show()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelableArrayList(EXTRA_STATE, adapter.mData)
     }
 }

@@ -20,6 +20,7 @@ import com.dicoding.faprayyy.githubuser.databinding.DetailUserFragmentBinding
 import com.dicoding.faprayyy.githubuser.datamodel.UserModel
 import com.dicoding.faprayyy.githubuser.utils.convertNullToString
 import com.dicoding.faprayyy.githubuser.view.favorituser.UserFavoriteViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class DetailUserFragment : Fragment() {
 
@@ -136,7 +137,8 @@ class DetailUserFragment : Fragment() {
         mUserFavoriteViewModel.addUser(user)
         stateFavorite = true
         changeImgFAB(stateFavorite)
-        Toast.makeText(context, "${user.username} add to favorite!", Toast.LENGTH_SHORT).show()
+        val string = getString(R.string.add_favorite, user.username)
+        showSnackBarMessage(string)
     }
 
     private fun changeImgFAB(state : Boolean) {
@@ -149,7 +151,8 @@ class DetailUserFragment : Fragment() {
 
     private fun deleteUserFavFromDB(user: UserFavorite) {
         mUserFavoriteViewModel.deleteUser(user)
-        Toast.makeText(context, "${user.username} remove from favorite!", Toast.LENGTH_SHORT).show()
+        val string = getString(R.string.remove_favorite, user.username)
+        showSnackBarMessage(string)
         changeImgFAB(stateFavorite)
     }
 
@@ -157,4 +160,8 @@ class DetailUserFragment : Fragment() {
         super.onDestroy()
         _binding = null
     }
+    private fun showSnackBarMessage(message: String) {
+        Snackbar.make(binding.mainLayout, message, Snackbar.LENGTH_SHORT).show()
+    }
+
 }

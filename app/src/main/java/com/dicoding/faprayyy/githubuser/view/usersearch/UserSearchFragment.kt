@@ -39,6 +39,7 @@ class UserSearchFragment : Fragment() {
 
         setUpToolbar()
         showTvSearchFirst(stateTvSearchMsg)
+
         return view
     }
 
@@ -52,7 +53,9 @@ class UserSearchFragment : Fragment() {
         binding.rvUser.layoutManager = LinearLayoutManager(activity)
         binding.rvUser.adapter = adapter
         searchData()
-
+        if (adapter.mData != ArrayList<UserModel>()){
+            showTvSearchFirst(false)
+        }
         viewModel.getUsers().observe(viewLifecycleOwner, {
             if (it != null) {
                 adapter.setData(it)
