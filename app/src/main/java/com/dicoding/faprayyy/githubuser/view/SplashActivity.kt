@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatDelegate
-import com.bumptech.glide.Glide
 import com.dicoding.faprayyy.githubuser.databinding.ActivitySplashBinding
 
 class SplashActivity : AppCompatActivity() {

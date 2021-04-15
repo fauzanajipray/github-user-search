@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.faprayyy.githubuser.adapter.UserAdapter
-import com.dicoding.faprayyy.githubuser.databinding.FollowerFollowingFragmentBinding
 import com.dicoding.faprayyy.githubuser.databinding.FragmentFollowerBinding
 import com.dicoding.faprayyy.githubuser.datamodel.UserModel
 
@@ -24,7 +23,7 @@ class FollowerFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentFollowerBinding.inflate(inflater, container, false)
         val view = binding.root
         showLoading(true)

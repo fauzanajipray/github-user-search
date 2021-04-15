@@ -1,11 +1,13 @@
 package com.dicoding.faprayyy.githubuser.view.moredetailuiser
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.dicoding.faprayyy.githubuser.BuildConfig
 import com.dicoding.faprayyy.githubuser.datamodel.UserModel
 import com.dicoding.faprayyy.githubuser.utils.utils
 import com.dicoding.faprayyy.githubuser.view.usersearch.UserSearchViewModel
@@ -17,16 +19,13 @@ import org.json.JSONObject
 
 class FollowerViewModel(application: Application) : AndroidViewModel(application) {
 
-    companion object{
-        val TAG = this::class.java.simpleName
-    }
-
+    @SuppressLint("StaticFieldLeak")
     private val context = getApplication<Application>().applicationContext
 
-//  TODO Benerin ini Github APIKEY NYA (Saran Reviewer)
-//    var GITHUB_API: String = BuildConfig.TheGithubApi
 
     private val apiKey = utils.apiKey
+    // TODO GITHUB KEY
+    // private val apiKey = BuildConfig.GITHUB_TOKEN
 
     val listFollower = MutableLiveData<ArrayList<UserModel>>()
     private val listItemsFollower = ArrayList<UserModel>()
@@ -53,7 +52,6 @@ class FollowerViewModel(application: Application) : AndroidViewModel(application
                 } else {
                     try {
                         val jsonArray = JSONArray(result)
-                        Log.d(TAG, "DATA FOLLOWER2 : ${jsonArray}")
                         for (i in 0 until jsonArray.length()) {
                             val jsonObject = jsonArray.getJSONObject(i)
                             val login: String = jsonObject.getString("login")

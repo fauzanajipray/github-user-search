@@ -1,6 +1,5 @@
 package com.dicoding.faprayyy.githubuser.view.userdetail
 
-import android.util.Log
 import java.math.BigDecimal
 import java.math.RoundingMode
 

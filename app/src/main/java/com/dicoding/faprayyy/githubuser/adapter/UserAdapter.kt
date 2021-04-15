@@ -10,7 +10,6 @@ import com.dicoding.faprayyy.githubuser.R
 import com.dicoding.faprayyy.githubuser.databinding.ItemUserBinding
 import com.dicoding.faprayyy.githubuser.datamodel.UserModel
 import com.dicoding.faprayyy.githubuser.utils.convertNullToString
-import com.dicoding.faprayyy.githubuser.view.usersearch.UserSearchFragment
 
 class UserAdapter : RecyclerView.Adapter<UserAdapter.UserHolder>() {
 

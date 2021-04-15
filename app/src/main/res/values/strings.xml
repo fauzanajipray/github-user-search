@@ -20,8 +20,6 @@
     <string name="language">Language</string>
     <string name="notification">Notification</string>
     <string name="add_notification_summary">Give notifications everyday</string>
-
-
     <string name="key_notification" translatable="false">notification</string>
     <string name="key_about_me" translatable="false">about me</string>
     <string name="key_language" translatable="false">language</string>

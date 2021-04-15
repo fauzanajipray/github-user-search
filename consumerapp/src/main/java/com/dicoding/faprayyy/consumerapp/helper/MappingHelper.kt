@@ -1,9 +1,7 @@
 package com.dicoding.faprayyy.consumerapp.helper
 
 import android.database.Cursor
-import android.os.Parcelable
 import com.dicoding.faprayyy.consumerapp.data.UserFavorite
-import com.dicoding.faprayyy.consumerapp.dataModel.UserModel
 
 object MappingHelper {
     fun mapCursorToArrayList(favoritesCursor: Cursor?): ArrayList<UserFavorite> {

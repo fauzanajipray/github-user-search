@@ -4,8 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -79,10 +77,8 @@ class SettingsActivity : AppCompatActivity() {
 
             notificationPreference.setOnPreferenceChangeListener { _, state ->
                 if(state as Boolean){
-                    Log.d("TAG", "Alarm nyala : $state")
                     alarmReceiver.setRepeatingAlarm(mContext)
                 } else {
-                    Log.d("TAG", "Switch false : $state")
                     alarmReceiver.cancelAlarm(mContext)
                 }
                 true

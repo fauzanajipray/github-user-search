@@ -16,9 +16,9 @@ import org.json.JSONObject
 
 class UserSearchViewModel(application: Application) : AndroidViewModel(application) {
 
-    val apiKey = utils.apiKey
-    // TODO : SET API KEY AT SECREET PROPERTIES
-    // val apiKey2 = BuildConfig.GITHUB_TOKEN
+    private val apiKey = utils.apiKey
+    // TODO GITHUB KEY
+    // private val apiKey = BuildConfig.GITHUB_TOKEN
 
     val listUsers = MutableLiveData<ArrayList<UserModel>>()
     val listItems = ArrayList<UserModel>()

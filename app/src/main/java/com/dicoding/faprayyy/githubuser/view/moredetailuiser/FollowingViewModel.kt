@@ -18,14 +18,12 @@ import org.json.JSONObject
 
 class FollowingViewModel(application: Application) : AndroidViewModel(application) {
 
-    companion object{
-        val TAG = this::class.java.simpleName
-    }
-
     @SuppressLint("StaticFieldLeak")
     private val context = getApplication<Application>().applicationContext
 
-    val apiKey = utils.apiKey
+    private val apiKey = utils.apiKey
+    // TODO GITHUB KEY
+    // private val apiKey = BuildConfig.GITHUB_TOKEN
 
     val listFollowing = MutableLiveData<ArrayList<UserModel>>()
     val listItemsFollowing = ArrayList<UserModel>()
@@ -33,7 +31,6 @@ class FollowingViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun setFollowing(userName: String){
         listItemsFollowing.clear()
-        Log.d(TAG, "DATA FOLLOWING1 : $userName , $listItemsFollowing")
 
         val client = AsyncHttpClient()
         client.addHeader("Authorization", "token $apiKey")
@@ -52,7 +49,6 @@ class FollowingViewModel(application: Application) : AndroidViewModel(applicatio
                 } else {
                     try {
                         val jsonArray = JSONArray(result)
-                        Log.d(TAG, "DATA FOLLOWING2 : $jsonArray")
                         for (i in 0 until jsonArray.length()) {
                             val jsonObject = jsonArray.getJSONObject(i)
                             val login: String = jsonObject.getString("login")

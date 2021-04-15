@@ -11,11 +11,11 @@ import com.dicoding.faprayyy.githubuser.data.UserFavoriteDatabase
 class MyContentProvider : ContentProvider() {
 
     companion object {
-        const val AUTHORITY = "com.dicoding.faprayyy.githubuser"
+        private const val AUTHORITY = "com.dicoding.faprayyy.githubuser"
         private const val FAVORITE = 1
         private const val FAVORITE_ID = 2
         private val sUriMatcher = UriMatcher(UriMatcher.NO_MATCH)
-        private val TABLE_NAME = "favorite"
+        private const val TABLE_NAME = "favorite"
         init {
             // content://com.dicoding.faprayyy.githubuser/favorite
             sUriMatcher.addURI(AUTHORITY, TABLE_NAME, FAVORITE)

@@ -21,15 +21,14 @@ class AlarmReceiver : BroadcastReceiver() {
 
     companion object {
         private const val ID_REPEATING = 99
+        const val CHANNEL_ID = "Channel_1"
+        const val CHANNEL_NAME = "Notification_Everyday"
     }
     override fun onReceive(context: Context, intent: Intent) {
         showNotifications(context)
     }
 
     private fun showNotifications(context: Context) {
-        val CHANNEL_ID = "Channel_1"
-        val CHANNEL_NAME = "Notification_Everyday"
-
         val title = context.getString(R.string.app_name)
         val message = context.getString(R.string.find_user_now)
 

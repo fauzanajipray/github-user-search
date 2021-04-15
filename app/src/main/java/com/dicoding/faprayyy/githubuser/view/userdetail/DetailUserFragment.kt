@@ -20,17 +20,12 @@ import com.dicoding.faprayyy.githubuser.databinding.DetailUserFragmentBinding
 import com.dicoding.faprayyy.githubuser.datamodel.UserModel
 import com.dicoding.faprayyy.githubuser.utils.convertNullToString
 import com.dicoding.faprayyy.githubuser.view.favorituser.UserFavoriteViewModel
-import com.google.android.material.snackbar.Snackbar
 
 class DetailUserFragment : Fragment() {
 
-    companion object {
-        val TAG = this::class.java.simpleName
-    }
-
     private var _binding: DetailUserFragmentBinding? = null
     private val binding get() = _binding as DetailUserFragmentBinding
-    private lateinit var user : UserModel
+    private lateinit var mUser : UserModel
     private val args by navArgs<DetailUserFragmentArgs>()
     private lateinit var database: UserFavoriteDatabase
     private lateinit var imgNotFavorite : Drawable
@@ -57,26 +52,26 @@ class DetailUserFragment : Fragment() {
         mUserFavoriteViewModel = ViewModelProvider(this).get(UserFavoriteViewModel::class.java)
 
         stateFavorite = false
-        user = args.dataUser
-        getUserFavFromDB(user.username as String)
-        user.let {
+        mUser = args.dataUser
+        getUserFavFromDB(mUser.username as String)
+        mUser.let { user ->
             binding.apply {
-                tvName.text = it.name?.let { convertNullToString(it) }
-                tvUserName.text = it.username?.let { convertNullToString(it) }
-                tvBio.text = it.bio?.let { convertNullToString(it) }
-                tvCompany.text = it.company?.let { convertNullToString(it) }
-                tvLocation.text = it.location?.let { convertNullToString(it) }
-                tvRepoCount.text = it.repository.toString()
-                tvFollowersCount.text = it.follower.toString()
-                tvFollowingCount.text = it.following.toString()
-                titleActionBar.text = it.name?.let{ convertNullToString(it)}
-                val follower : String = convertIntValue(it.follower)
-                val following : String = convertIntValue(it.following)
+                tvName.text = user.name?.let { convertNullToString(it) }
+                tvUserName.text = user.username?.let { convertNullToString(it) }
+                tvBio.text = user.bio?.let { convertNullToString(it) }
+                tvCompany.text = user.company?.let { convertNullToString(it) }
+                tvLocation.text = user.location?.let { convertNullToString(it) }
+                tvRepoCount.text = user.repository.toString()
+                tvFollowersCount.text = user.follower.toString()
+                tvFollowingCount.text = user.following.toString()
+                titleActionBar.text = user.name?.let{ convertNullToString(it)}
+                val follower : String = convertIntValue(user.follower)
+                val following : String = convertIntValue(user.following)
                 val text = getString(R.string.followerfollowing, follower, following)
                 tvFollowersFollowing.text = text
             }
             Glide.with(view)
-                .load(it.avatar)
+                .load(user.avatar)
                 .apply(RequestOptions().override(55,55))
                 .into(binding.ivUserPic)
         }
@@ -104,7 +99,7 @@ class DetailUserFragment : Fragment() {
             }
         }
         val fab = binding.fabAdd
-        val userFavorite = user.let {
+        val userFavorite = mUser.let {
             UserFavorite(it.username.toString(), it.name, it.avatar, it.bio, it.company,
                     it.location, it.repository, it.follower, it.following)
         }
@@ -138,7 +133,7 @@ class DetailUserFragment : Fragment() {
         stateFavorite = true
         changeImgFAB(stateFavorite)
         val string = getString(R.string.add_favorite, user.username)
-        showSnackBarMessage(string)
+        showToast(string)
     }
 
     private fun changeImgFAB(state : Boolean) {
@@ -152,7 +147,7 @@ class DetailUserFragment : Fragment() {
     private fun deleteUserFavFromDB(user: UserFavorite) {
         mUserFavoriteViewModel.deleteUser(user)
         val string = getString(R.string.remove_favorite, user.username)
-        showSnackBarMessage(string)
+        showToast(string)
         changeImgFAB(stateFavorite)
     }
 
@@ -160,8 +155,8 @@ class DetailUserFragment : Fragment() {
         super.onDestroy()
         _binding = null
     }
-    private fun showSnackBarMessage(message: String) {
-        Snackbar.make(binding.mainLayout, message, Snackbar.LENGTH_SHORT).show()
+    private fun showToast(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
 }

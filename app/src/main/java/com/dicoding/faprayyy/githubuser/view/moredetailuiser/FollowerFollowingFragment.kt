@@ -19,7 +19,6 @@ class FollowerFollowingFragment : Fragment() {
             R.string.tab_text_1,
             R.string.tab_text_2
         )
-        val TAG = FollowerFollowingFragment::class.java.simpleName
         var EXTRA_USERNAME = "username"
         var EXTRA_POSITION = 0
     }
@@ -57,7 +56,6 @@ class FollowerFollowingFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         EXTRA_USERNAME = FollowerFollowingFragmentArgs.fromBundle(arguments as Bundle).userName
         EXTRA_POSITION = FollowerFollowingFragmentArgs.fromBundle(arguments as Bundle).position
-        Log.d(TAG, "DATA : $EXTRA_USERNAME, $EXTRA_POSITION")
         setupTabLayout()
     }
 

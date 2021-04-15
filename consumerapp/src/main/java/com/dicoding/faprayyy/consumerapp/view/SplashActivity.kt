@@ -16,10 +16,6 @@ class SplashActivity : AppCompatActivity() {
 
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.imgIconSplash
-
-
         val handler = Handler(Looper.getMainLooper())
         handler.postDelayed({
 

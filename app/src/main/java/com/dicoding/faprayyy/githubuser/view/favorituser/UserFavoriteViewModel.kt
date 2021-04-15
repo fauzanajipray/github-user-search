@@ -13,9 +13,9 @@ import kotlinx.coroutines.launch
 
 class UserFavoriteViewModel(application: Application) : AndroidViewModel(application) {
 
-    val readAllData: LiveData<List<UserFavorite>>
+    private val readAllData: LiveData<List<UserFavorite>>
     private val repository: UserFavoriteRepository
-    val userById = MutableLiveData<UserFavorite?>()
+    private val userById = MutableLiveData<UserFavorite?>()
 
     init {
         val userDao = UserFavoriteDatabase.getDatabase(
@@ -31,12 +31,6 @@ class UserFavoriteViewModel(application: Application) : AndroidViewModel(applica
         }
     }
 
-    fun updateUser(user: UserFavorite){
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.updateUser(user)
-        }
-    }
-
     fun deleteUser(user: UserFavorite){
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteUser(user)
@@ -44,24 +38,11 @@ class UserFavoriteViewModel(application: Application) : AndroidViewModel(applica
         userById.postValue(null)
     }
 
-    fun deleteAllUsers(){
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteAllUsers()
-        }
-    }
-
     fun readUserById(userName : String){
         viewModelScope.launch(Dispatchers.IO) {
             userById.postValue(repository.readUserById(userName))
         }
     }
-
-    fun deleteUserById(userName: String){
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteUserById(userName)
-        }
-    }
-
 
     fun getUserById() : LiveData<UserFavorite?>{
         return userById
